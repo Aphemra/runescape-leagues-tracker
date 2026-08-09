@@ -435,6 +435,16 @@ select {
   text-transform: uppercase;
 }
 
+.filter-group legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+}
+
+.filter-group legend + * {
+  clear: both;
+}
+
 .segmented-control {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -466,13 +476,68 @@ select {
   gap: 0.35rem;
 }
 
+.check-chip {
+  cursor: pointer;
+}
+
 .check-chip input {
   position: absolute;
   opacity: 0;
   pointer-events: none;
 }
 
-.check-chip span {
+.check-chip input:checked + span {
+  color: #f4d697;
+  border-color: #826329;
+  background: #302614;
+}
+
+.check-chip--beginner {
+  --chip-color: #9aa8b5;
+}
+
+.check-chip--easy {
+  --chip-color: var(--tier-easy);
+}
+
+.check-chip--medium {
+  --chip-color: var(--tier-medium);
+}
+
+.check-chip--hard {
+  --chip-color: var(--tier-hard);
+}
+
+.check-chip--elite {
+  --chip-color: var(--tier-elite);
+}
+
+.check-chip--master {
+  --chip-color: var(--tier-master);
+}
+
+.check-chip--tier > span {
+  color: color-mix(in srgb, var(--chip-color) 76%, var(--text));
+  border-color: color-mix(in srgb, var(--chip-color) 38%, var(--border));
+  background: color-mix(in srgb, var(--chip-color) 9%, #111821);
+  transition:
+    color 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.check-chip--tier:hover > span {
+  border-color: color-mix(in srgb, var(--chip-color) 62%, var(--border));
+  background: color-mix(in srgb, var(--chip-color) 15%, #111821);
+}
+
+.check-chip--tier input:checked + span {
+  color: color-mix(in srgb, var(--chip-color) 82%, white);
+  border-color: color-mix(in srgb, var(--chip-color) 78%, var(--border));
+  background: color-mix(in srgb, var(--chip-color) 24%, #111821);
+}
+
+.check-chip > span {
   display: grid;
   min-height: 1.9rem;
   place-items: center;
@@ -495,21 +560,79 @@ select {
   background: #302614;
 }
 
-.choice-list {
-  display: grid;
-  gap: 0.2rem;
-  max-height: 12rem;
-  overflow: auto;
+.choice-grid--facets {
+  align-items: stretch;
 }
 
-.choice-list label,
-.favorite-toggle {
-  display: flex;
-  gap: 0.55rem;
-  align-items: center;
-  min-height: 1.8rem;
-  color: var(--text-muted);
-  font-size: 0.75rem;
+.check-chip--facet > span {
+  grid-template-columns: auto minmax(0, 1fr);
+  justify-content: start;
+  gap: 0.4rem;
+  min-height: 2.15rem;
+  padding: 0.35rem 0.45rem;
+  text-align: left;
+}
+
+.check-chip--facet > span:hover {
+  border-color: #546c82;
+  background: var(--surface-hover);
+}
+
+.check-chip--facet img {
+  width: 1.15rem;
+  height: 1.15rem;
+  object-fit: contain;
+}
+
+.check-chip__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.check-chip--beginner {
+  --chip-color: #9aa8b5;
+}
+
+.check-chip--easy {
+  --chip-color: var(--tier-easy);
+}
+
+.check-chip--medium {
+  --chip-color: var(--tier-medium);
+}
+
+.check-chip--hard {
+  --chip-color: var(--tier-hard);
+}
+
+.check-chip--elite {
+  --chip-color: var(--tier-elite);
+}
+
+.check-chip--master {
+  --chip-color: var(--tier-master);
+}
+
+.check-chip--tier > span {
+  color: color-mix(in srgb, var(--chip-color) 76%, var(--text));
+  border-color: color-mix(in srgb, var(--chip-color) 38%, var(--border));
+  background: color-mix(in srgb, var(--chip-color) 9%, #111821);
+  transition:
+    color 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
+}
+
+.check-chip--tier:hover > span {
+  border-color: color-mix(in srgb, var(--chip-color) 62%, var(--border));
+  background: color-mix(in srgb, var(--chip-color) 15%, #111821);
+}
+
+.check-chip--tier input:checked + span {
+  color: color-mix(in srgb, var(--chip-color) 82%, white);
+  border-color: color-mix(in srgb, var(--chip-color) 78%, var(--border));
+  background: color-mix(in srgb, var(--chip-color) 24%, #111821);
 }
 
 input[type="checkbox"] {
@@ -519,18 +642,54 @@ input[type="checkbox"] {
   accent-color: var(--accent);
 }
 
-.filter-group select {
-  width: 100%;
-  font-size: 0.76rem;
+.filter-group--favorite {
+  padding-block: 0.75rem;
 }
 
 .favorite-toggle {
-  padding-block: 0.75rem;
-  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  width: 100%;
+  min-height: 2.25rem;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0.45rem;
+  color: var(--text-muted);
+  background: #111821;
+  font-size: 0.72rem;
+  font-weight: 750;
+  transition:
+    color 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease;
 }
 
-.favorite-toggle > span {
+.favorite-toggle:hover {
+  color: var(--text);
+  border-color: #546c82;
+  background: var(--surface-hover);
+}
+
+.favorite-toggle[aria-pressed="true"] {
+  color: #f1d18a;
+  border-color: #8c6c31;
+  background: #302614;
+}
+
+.favorite-toggle__star {
   color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.favorite-toggle[aria-pressed="true"] .favorite-toggle__star {
+  color: #f1c765;
+}
+
+.filter-group select {
+  width: 100%;
+  font-size: 0.76rem;
 }
 
 .filter-group--sort > div {
@@ -556,12 +715,32 @@ input[type="checkbox"] {
   border-top: 1px solid var(--border);
 }
 
-.progress-panel summary {
-  padding: 0.8rem 0.9rem;
+.progress-panel__toggle {
+  display: flex;
+  width: 100%;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.9rem;
+  border: 0;
   color: var(--text-muted);
+  background: transparent;
   font-size: 0.75rem;
   font-weight: 750;
-  cursor: pointer;
+  text-align: left;
+}
+
+.progress-panel__toggle:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.progress-panel__chevron {
+  transition: transform 220ms ease;
+}
+
+.progress-panel__toggle[aria-expanded="true"] .progress-panel__chevron {
+  transform: rotate(180deg);
 }
 
 .progress-panel__list {
@@ -616,7 +795,10 @@ input[type="checkbox"] {
   border-radius: 0.72rem;
   background: linear-gradient(110deg, #1a2430f5, #141b24f5);
   box-shadow: 0 0.35rem 1rem #00000014;
-  transition: border-color 120ms ease, background 120ms ease, opacity 120ms ease;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease,
+    opacity 120ms ease;
 }
 
 .task-card:hover {
@@ -711,11 +893,21 @@ input[type="checkbox"] {
   background: color-mix(in srgb, var(--tier-color) 16%, #121a23);
 }
 
-.badge--easy { --tier-color: var(--tier-easy); }
-.badge--medium { --tier-color: var(--tier-medium); }
-.badge--hard { --tier-color: var(--tier-hard); }
-.badge--elite { --tier-color: var(--tier-elite); }
-.badge--master { --tier-color: var(--tier-master); }
+.badge--easy {
+  --tier-color: var(--tier-easy);
+}
+.badge--medium {
+  --tier-color: var(--tier-medium);
+}
+.badge--hard {
+  --tier-color: var(--tier-hard);
+}
+.badge--elite {
+  --tier-color: var(--tier-elite);
+}
+.badge--master {
+  --tier-color: var(--tier-master);
+}
 
 .badge--points {
   color: #e7c77f;
@@ -773,9 +965,15 @@ input[type="checkbox"] {
   background: currentColor;
 }
 
-.requirement-status--met { color: var(--success); }
-.requirement-status--unmet { color: var(--danger); }
-.requirement-status--unknown { color: var(--warning); }
+.requirement-status--met {
+  color: var(--success);
+}
+.requirement-status--unmet {
+  color: var(--danger);
+}
+.requirement-status--unknown {
+  color: var(--warning);
+}
 
 .task-card__requirements {
   display: flex;
@@ -816,6 +1014,25 @@ input[type="checkbox"] {
   color: var(--text);
 }
 
+.accordion-region {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows 220ms ease,
+    opacity 180ms ease;
+}
+
+.accordion-region--open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.accordion-region > div {
+  min-height: 0;
+  overflow: hidden;
+}
+
 .task-card__details {
   display: grid;
   gap: 0.6rem;
@@ -844,6 +1061,7 @@ input[type="checkbox"] {
   padding: 0.55rem;
   border-radius: 0.5rem;
   resize: vertical;
+  cursor: text;
 }
 
 .load-more {
@@ -920,7 +1138,7 @@ input[type="checkbox"] {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   width: min(56rem, 100%);
-  max-height: min(54rem, calc(100vh - 2rem));
+  max-height: calc(100vh - 2rem);
   overflow: hidden;
   border: 1px solid #4a5850;
   border-radius: 0.9rem;
@@ -1078,7 +1296,9 @@ input[type="checkbox"] {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 980px) {
@@ -1220,6 +1440,7 @@ input[type="checkbox"] {
     grid-template-columns: 2.1rem minmax(0, 1fr);
     gap: 0.55rem;
     padding: 0.7rem;
+    cursor: pointer;
   }
 
   .task-card__check {

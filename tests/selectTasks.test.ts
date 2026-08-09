@@ -18,7 +18,16 @@ const manifest: LeagueDataset["manifest"] = {
     { id: "easy", label: "Easy", order: 0, color: "green", rewards: [] },
     { id: "medium", label: "Medium", order: 1, color: "blue", rewards: [] },
   ],
-  facets: [{ id: "category", label: "Category", values: [{ id: "skills", label: "Skills" }, { id: "bosses", label: "Bosses" }] }],
+  facets: [
+    {
+      id: "category",
+      label: "Category",
+      values: [
+        { id: "skills", label: "Skills" },
+        { id: "bosses", label: "Bosses" },
+      ],
+    },
+  ],
   playerStats: [{ id: "fishing", label: "Fishing", group: "Skills", minimum: 1, maximum: 99, defaultValue: 1 }],
   mechanics: [],
 };
@@ -39,14 +48,21 @@ function task(id: string, title: string, tierId: string, category: string, point
 
 const dataset: LeagueDataset = {
   manifest,
-  tasks: [task("one", "Alpha", "easy", "skills", 10), task("two", "Bravo", "medium", "bosses", 30), task("three", "Charlie", "easy", "skills", 10)],
+  tasks: [
+    task("one", "Alpha", "easy", "skills", 10),
+    task("two", "Bravo", "medium", "bosses", 30),
+    task("three", "Charlie", "easy", "skills", 10),
+  ],
 };
 
 test("completed and incomplete filters are exact opposites", () => {
   const state = buildDefaultLeagueState(manifest);
   state.completedTaskIds = ["two"];
   const views = buildTaskViews(dataset, state);
-  const tierOrder = new Map([["easy", 0], ["medium", 1]]);
+  const tierOrder = new Map([
+    ["easy", 0],
+    ["medium", 1],
+  ]);
 
   const incomplete = filterAndSortTaskViews(views, { ...state.filters, completion: "incomplete" }, tierOrder);
   const complete = filterAndSortTaskViews(views, { ...state.filters, completion: "complete" }, tierOrder);
@@ -61,7 +77,10 @@ test("combines facets and search without mutating the source list", () => {
   const result = filterAndSortTaskViews(
     views,
     { ...state.filters, search: "charlie", facets: { category: ["skills"] } },
-    new Map([["easy", 0], ["medium", 1]]),
+    new Map([
+      ["easy", 0],
+      ["medium", 1],
+    ]),
   );
 
   expect(result.map((view) => view.task.id)).toEqual(["three"]);

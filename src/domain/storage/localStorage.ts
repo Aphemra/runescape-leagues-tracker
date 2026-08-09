@@ -46,14 +46,18 @@ function normalizeFilters(raw: unknown): LeagueFilterState {
   const defaults = buildDefaultFilters();
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return defaults;
   const value = raw as Partial<LeagueFilterState>;
-  const rawFacets = value.facets && typeof value.facets === "object" && !Array.isArray(value.facets) ? value.facets : {};
+  const rawFacets =
+    value.facets && typeof value.facets === "object" && !Array.isArray(value.facets) ? value.facets : {};
 
   return {
     search: typeof value.search === "string" ? value.search : defaults.search,
     tierIds: stringArray(value.tierIds),
     facets: Object.fromEntries(Object.entries(rawFacets).map(([key, entries]) => [key, stringArray(entries)])),
     completion: value.completion === "complete" || value.completion === "incomplete" ? value.completion : "all",
-    requirements: value.requirements === "met" || value.requirements === "unmet" || value.requirements === "unknown" ? value.requirements : "all",
+    requirements:
+      value.requirements === "met" || value.requirements === "unmet" || value.requirements === "unknown"
+        ? value.requirements
+        : "all",
     favoritesOnly: typeof value.favoritesOnly === "boolean" ? value.favoritesOnly : false,
     sortField: value.sortField === "tier" || value.sortField === "points" ? value.sortField : "title",
     sortDirection: value.sortDirection === "desc" ? "desc" : "asc",
@@ -76,7 +80,9 @@ export function loadLeagueState(manifest: LeagueManifest): LeagueUserState | nul
       favoriteTaskIds: stringArray(raw.favoriteTaskIds),
       taskNotes:
         raw.taskNotes && typeof raw.taskNotes === "object" && !Array.isArray(raw.taskNotes)
-          ? Object.fromEntries(Object.entries(raw.taskNotes).filter((entry): entry is [string, string] => typeof entry[1] === "string"))
+          ? Object.fromEntries(
+              Object.entries(raw.taskNotes).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
+            )
           : {},
       stats: normalizeStats(manifest, raw.stats),
       filters: normalizeFilters(raw.filters),
@@ -92,7 +98,10 @@ export function saveLeagueState(state: LeagueUserState): void {
   if (!canUseStorage()) return;
 
   try {
-    localStorage.setItem(leagueStateKey(state.leagueId), JSON.stringify({ ...state, updatedAt: new Date().toISOString() }));
+    localStorage.setItem(
+      leagueStateKey(state.leagueId),
+      JSON.stringify({ ...state, updatedAt: new Date().toISOString() }),
+    );
   } catch (error) {
     console.error(`Failed to save state for ${state.leagueId}.`, error);
   }

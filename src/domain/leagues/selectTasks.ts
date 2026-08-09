@@ -78,7 +78,9 @@ export function filterAndSortTaskViews(
     let comparison = 0;
     if (filters.sortField === "title") comparison = left.task.title.localeCompare(right.task.title);
     if (filters.sortField === "tier") {
-      comparison = (tierOrder.get(left.task.tierId) ?? Number.MAX_SAFE_INTEGER) - (tierOrder.get(right.task.tierId) ?? Number.MAX_SAFE_INTEGER);
+      comparison =
+        (tierOrder.get(left.task.tierId) ?? Number.MAX_SAFE_INTEGER) -
+        (tierOrder.get(right.task.tierId) ?? Number.MAX_SAFE_INTEGER);
     }
     if (filters.sortField === "points") comparison = left.points - right.points;
     if (comparison === 0) comparison = left.task.title.localeCompare(right.task.title);

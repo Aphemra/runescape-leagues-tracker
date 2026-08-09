@@ -14,7 +14,7 @@
       "url": "https://runescape.wiki/w/Equilibrium_League/Tasks",
       "license": "CC BY-SA 3.0",
       "revision": 37149806,
-      "importedAt": "2026-08-09T04:09:14.311Z"
+      "importedAt": "2026-08-09T06:04:45.908Z"
     },
     "expectedTaskCount": 533,
     "rewardCurrencies": [
@@ -57,51 +57,63 @@
         "values": [
           {
             "id": "global",
-            "label": "Global"
+            "label": "Global",
+            "icon": "icons/regions/rs3/global.png"
           },
           {
             "id": "anachronia",
-            "label": "Anachronia"
+            "label": "Anachronia",
+            "icon": "icons/regions/rs3/anachronia.png"
           },
           {
             "id": "asgarnia",
-            "label": "Asgarnia"
+            "label": "Asgarnia",
+            "icon": "icons/regions/rs3/asgarnia.png"
           },
           {
             "id": "desert",
-            "label": "Desert"
+            "label": "Desert",
+            "icon": "icons/regions/rs3/desert.png"
           },
           {
             "id": "fremennik",
-            "label": "Fremennik"
+            "label": "Fremennik",
+            "icon": "icons/regions/rs3/fremennik.png"
           },
           {
             "id": "havenhythe",
-            "label": "Havenhythe"
+            "label": "Havenhythe",
+            "icon": "icons/regions/rs3/havenhythe.png"
           },
           {
             "id": "kandarin",
-            "label": "Kandarin"
+            "label": "Kandarin",
+            "icon": "icons/regions/rs3/kandarin.png"
           },
           {
             "id": "karamja",
-            "label": "Karamja"
+            "label": "Karamja",
+            "icon": "icons/regions/rs3/karamja.png"
           },
           {
             "id": "misthalin",
-            "label": "Misthalin"
+            "label": "Misthalin",
+            "icon": "icons/regions/rs3/misthalin.png"
           },
           {
             "id": "morytania",
-            "label": "Morytania"
+            "label": "Morytania",
+            "icon": "icons/regions/rs3/morytania.png"
           },
           {
             "id": "tirannwn",
-            "label": "Tirannwn"
+            "label": "Tirannwn",
+            "icon": "icons/regions/rs3/tirannwn.png"
           },
           {
             "id": "wilderness",
-            "label": "Wilderness"
+            "label": "Wilderness",
+            "icon": "icons/regions/rs3/wilderness.png"
           }
         ]
       }
@@ -113,7 +125,8 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/attack.png"
       },
       {
         "id": "strength",
@@ -121,7 +134,8 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/strength.png"
       },
       {
         "id": "defence",
@@ -129,7 +143,8 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 99,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/defence.png"
       },
       {
         "id": "constitution",
@@ -137,7 +152,8 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 99,
-        "defaultValue": 10
+        "defaultValue": 10,
+        "icon": "icons/skills/rs3/constitution.png"
       },
       {
         "id": "ranged",
@@ -145,7 +161,8 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/ranged.png"
       },
       {
         "id": "prayer",
@@ -153,7 +170,8 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 99,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/prayer.png"
       },
       {
         "id": "magic",
@@ -161,7 +179,8 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/magic.png"
       },
       {
         "id": "summoning",
@@ -169,7 +188,8 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 99,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/summoning.png"
       },
       {
         "id": "necromancy",
@@ -177,7 +197,8 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/necromancy.png"
       },
       {
         "id": "archaeology",
@@ -185,7 +206,8 @@
         "group": "Gathering",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/archaeology.png"
       },
       {
         "id": "divination",
@@ -193,7 +215,8 @@
         "group": "Gathering",
         "minimum": 1,
         "maximum": 99,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/divination.png"
       },
       {
         "id": "farming",
@@ -201,7 +224,8 @@
         "group": "Gathering",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/farming.png"
       },
       {
         "id": "fishing",
@@ -209,7 +233,8 @@
         "group": "Gathering",
         "minimum": 1,
         "maximum": 99,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/fishing.png"
       },
       {
         "id": "hunter",
@@ -217,7 +242,8 @@
         "group": "Gathering",
         "minimum": 1,
         "maximum": 110,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/hunter.png"
       },
       {
         "id": "mining",
@@ -225,7 +251,8 @@
         "group": "Gathering",
         "minimum": 1,
         "maximum": 110,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/mining.png"
       },
       {
         "id": "woodcutting",
@@ -233,7 +260,8 @@
         "group": "Gathering",
         "minimum": 1,
         "maximum": 110,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/woodcutting.png"
       },
       {
         "id": "cooking",
@@ -241,7 +269,8 @@
         "group": "Artisan",
         "minimum": 1,
         "maximum": 99,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/cooking.png"
       },
       {
         "id": "construction",
@@ -249,7 +278,8 @@
         "group": "Artisan",
         "minimum": 1,
         "maximum": 99,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/construction.png"
       },
       {
         "id": "crafting",
@@ -257,7 +287,8 @@
         "group": "Artisan",
         "minimum": 1,
         "maximum": 110,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/crafting.png"
       },
       {
         "id": "firemaking",
@@ -265,7 +296,8 @@
         "group": "Artisan",
         "minimum": 1,
         "maximum": 110,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/firemaking.png"
       },
       {
         "id": "fletching",
@@ -273,7 +305,8 @@
         "group": "Artisan",
         "minimum": 1,
         "maximum": 110,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/fletching.png"
       },
       {
         "id": "herblore",
@@ -281,7 +314,8 @@
         "group": "Artisan",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/herblore.png"
       },
       {
         "id": "runecrafting",
@@ -289,7 +323,8 @@
         "group": "Artisan",
         "minimum": 1,
         "maximum": 110,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/runecrafting.png"
       },
       {
         "id": "smithing",
@@ -297,7 +332,8 @@
         "group": "Artisan",
         "minimum": 1,
         "maximum": 110,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/smithing.png"
       },
       {
         "id": "agility",
@@ -305,7 +341,8 @@
         "group": "Support",
         "minimum": 1,
         "maximum": 99,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/agility.png"
       },
       {
         "id": "dungeoneering",
@@ -313,7 +350,8 @@
         "group": "Support",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/dungeoneering.png"
       },
       {
         "id": "slayer",
@@ -321,7 +359,8 @@
         "group": "Support",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/slayer.png"
       },
       {
         "id": "thieving",
@@ -329,7 +368,8 @@
         "group": "Support",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/thieving.png"
       },
       {
         "id": "invention",
@@ -337,7 +377,8 @@
         "group": "Elite",
         "minimum": 1,
         "maximum": 120,
-        "defaultValue": 1
+        "defaultValue": 1,
+        "icon": "icons/skills/rs3/invention.png"
       }
     ],
     "mechanics": [

@@ -14,7 +14,7 @@ export const leagueCatalog: LeagueCatalogEntry[] = [
   {
     id: "rs3-equilibrium-2026",
     game: "rs3",
-    gameLabel: "RuneScape",
+    gameLabel: "RS3",
     name: "Equilibrium",
     edition: "League II",
     status: "partial",
@@ -22,7 +22,7 @@ export const leagueCatalog: LeagueCatalogEntry[] = [
   {
     id: "osrs-demonic-pacts-2026",
     game: "osrs",
-    gameLabel: "Old School RuneScape",
+    gameLabel: "OSRS",
     name: "Demonic Pacts",
     edition: "League VI",
     status: "complete",
@@ -49,7 +49,9 @@ export async function loadLeagueDataset(leagueId: string): Promise<LeagueDataset
   const dataset = await loader();
   const errors = validateLeagueDataset(dataset).filter((issue) => issue.level === "error");
   if (errors.length > 0) {
-    throw new Error(`The ${dataset.manifest.name} dataset is invalid:\n${errors.map((issue) => issue.message).join("\n")}`);
+    throw new Error(
+      `The ${dataset.manifest.name} dataset is invalid:\n${errors.map((issue) => issue.message).join("\n")}`,
+    );
   }
 
   return dataset;

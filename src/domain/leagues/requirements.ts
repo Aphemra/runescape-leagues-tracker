@@ -46,7 +46,10 @@ function evaluateNode(node: RequirementNode, context: RequirementEvaluationConte
   return "unknown";
 }
 
-export function evaluateRequirements(requirements: RequirementSet, context: RequirementEvaluationContext): RequirementEvaluation {
+export function evaluateRequirements(
+  requirements: RequirementSet,
+  context: RequirementEvaluationContext,
+): RequirementEvaluation {
   if (!requirements.root) {
     return requirements.parseStatus === "complete" ? "met" : "unknown";
   }

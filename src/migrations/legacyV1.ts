@@ -48,7 +48,8 @@ export function migrateLegacyV1State(manifest: LeagueManifest, tasks: LeagueTask
 
   if (rawFilters && typeof rawFilters === "object" && !Array.isArray(rawFilters)) {
     const filters = rawFilters as Record<string, unknown>;
-    migrated.filters.tierIds = typeof filters.selectedTier === "string" && filters.selectedTier !== "all" ? [filters.selectedTier] : [];
+    migrated.filters.tierIds =
+      typeof filters.selectedTier === "string" && filters.selectedTier !== "all" ? [filters.selectedTier] : [];
     migrated.filters.completion = filters.hideCompleted === true ? "incomplete" : "all";
     migrated.filters.requirements = filters.hideUncompletable === true ? "met" : "all";
     migrated.filters.sortField = filters.sortField === "tier" ? "tier" : "title";

@@ -46,6 +46,39 @@ const TIER_REWARDS: Record<string, number> = {
   master: 400,
 };
 
+const LOCATION_ICON_PATHS: Record<GameId, Record<string, string>> = {
+  osrs: {
+    general: "icons/regions/osrs/global.png",
+    global: "icons/regions/osrs/global.png",
+    asgarnia: "icons/regions/osrs/asgarnia.png",
+    desert: "icons/regions/osrs/desert.png",
+    fremennik: "icons/regions/osrs/fremennik.png",
+    kandarin: "icons/regions/osrs/kandarin.png",
+    karamja: "icons/regions/osrs/karamja.png",
+    kourend: "icons/regions/osrs/kourend.png",
+    misthalin: "icons/regions/osrs/misthalin.png",
+    morytania: "icons/regions/osrs/morytania.png",
+    tirannwn: "icons/regions/osrs/tirannwn.png",
+    varlamore: "icons/regions/osrs/varlamore.png",
+    wilderness: "icons/regions/osrs/wilderness.png",
+  },
+
+  rs3: {
+    global: "icons/regions/rs3/global.png",
+    anachronia: "icons/regions/rs3/anachronia.png",
+    asgarnia: "icons/regions/rs3/asgarnia.png",
+    desert: "icons/regions/rs3/desert.png",
+    fremennik: "icons/regions/rs3/fremennik.png",
+    havenhythe: "icons/regions/rs3/havenhythe.png",
+    kandarin: "icons/regions/rs3/kandarin.png",
+    karamja: "icons/regions/rs3/karamja.png",
+    misthalin: "icons/regions/rs3/misthalin.png",
+    morytania: "icons/regions/rs3/morytania.png",
+    tirannwn: "icons/regions/rs3/tirannwn.png",
+    wilderness: "icons/regions/rs3/wilderness.png",
+  },
+};
+
 const IMPORTS: ImportDefinition[] = [
   {
     leagueId: "osrs-demonic-pacts-2026",
@@ -121,9 +154,7 @@ function slug(value: string): string {
 }
 
 function titleCase(value: string): string {
-  return value
-    .replace(/[-_]+/g, " ")
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+  return value.replace(/[-_]+/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 function decodeEntities(value: string): string {
@@ -241,7 +272,7 @@ async function loadLegacyIds(): Promise<Map<string, string[]>> {
 
   legacyTasks.forEach((task, index) => {
     if (!task.name) return;
-    const location = slug(task.region === "global" ? "general" : task.region ?? "general");
+    const location = slug(task.region === "global" ? "general" : (task.region ?? "general"));
     const key = `${location}:${slug(task.name)}`;
     result.set(key, [...(result.get(key) ?? []), `${task.region ?? "global"}-${task.name}-${index}`]);
   });
@@ -249,7 +280,7 @@ async function loadLegacyIds(): Promise<Map<string, string[]>> {
   return result;
 }
 
-function buildFacetValues(rows: BucketRow[]): FacetValueDefinition[] {
+function buildFacetValues(rows: BucketRow[], game: GameId): FacetValueDefinition[] {
   const labels = new Map<string, string>();
   for (const row of rows) {
     const sourceValue = asString(row.region).trim() || "general";
@@ -258,7 +289,15 @@ function buildFacetValues(rows: BucketRow[]): FacetValueDefinition[] {
   }
 
   return [...labels.entries()]
-    .map(([id, label]) => ({ id, label }))
+    .map(([id, label]) => {
+      const icon = LOCATION_ICON_PATHS[game][id];
+
+      return {
+        id,
+        label,
+        ...(icon ? { icon } : {}),
+      };
+    })
     .sort((left, right) => {
       if (left.id === "general" || left.id === "global") return -1;
       if (right.id === "general" || right.id === "global") return 1;
@@ -288,7 +327,8 @@ function buildTask(
   } else {
     const clue = asString(row.clue).trim();
     if (clue) extensions.clue = clue;
-    if (Array.isArray(row.uses_skill)) extensions.usesSkills = row.uses_skill.map((entry) => normalizeStatId("rs3", entry));
+    if (Array.isArray(row.uses_skill))
+      extensions.usesSkills = row.uses_skill.map((entry) => normalizeStatId("rs3", entry));
   }
 
   return {
@@ -352,7 +392,13 @@ async function importLeague(definition: ImportDefinition): Promise<void> {
         color: `var(--tier-${id})`,
         rewards: [{ currencyId: "league-points", amount: TIER_REWARDS[id] ?? 0 }],
       })),
-    facets: [{ id: "location", label: "Location", values: buildFacetValues(rows) }],
+    facets: [
+      {
+        id: "location",
+        label: "Location",
+        values: buildFacetValues(rows, definition.game),
+      },
+    ],
     playerStats: definition.playerStats,
     mechanics: definition.mechanics,
   };
@@ -373,7 +419,9 @@ async function importLeague(definition: ImportDefinition): Promise<void> {
 const requestedId = process.argv[2] ?? "all";
 const selected = requestedId === "all" ? IMPORTS : IMPORTS.filter((entry) => entry.leagueId === requestedId);
 if (selected.length === 0) {
-  throw new Error(`Unknown import '${requestedId}'. Choose all or: ${IMPORTS.map((entry) => entry.leagueId).join(", ")}`);
+  throw new Error(
+    `Unknown import '${requestedId}'. Choose all or: ${IMPORTS.map((entry) => entry.leagueId).join(", ")}`,
+  );
 }
 
 for (const definition of selected) await importLeague(definition);

@@ -3,7 +3,7 @@ import type { PlayerStatDefinition } from "../../domain/leagues/types";
 type StatOptions = {
   maximum?: number;
   defaultValue?: number;
-  icon?: boolean;
+  icon?: string | false;
 };
 
 function stat(id: string, label: string, group: string, options: StatOptions = {}): PlayerStatDefinition {
@@ -14,7 +14,11 @@ function stat(id: string, label: string, group: string, options: StatOptions = {
     minimum: 1,
     maximum: options.maximum ?? 99,
     defaultValue: options.defaultValue ?? 1,
-    ...(options.icon === false ? {} : { icon: `icons/skills/${id}.png` }),
+    ...(options.icon === false
+      ? {}
+      : {
+          icon: options.icon ?? `icons/skills/osrs/${id}.png`,
+        }),
   };
 }
 
@@ -72,7 +76,7 @@ function rs3Stat(id: string, label: string, group: string, defaultValue = 1): Pl
   return stat(id, label, group, {
     maximum: rs3Caps[id] ?? 99,
     defaultValue,
-    icon: false,
+    icon: `icons/skills/rs3/${id}.png`,
   });
 }
 

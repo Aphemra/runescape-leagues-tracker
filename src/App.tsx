@@ -4,12 +4,7 @@ import FiltersPanel from "./components/FiltersPanel";
 import PlayerStatsModal from "./components/PlayerStatsModal";
 import ProgressPanel from "./components/ProgressPanel";
 import TaskCard from "./components/TaskCard";
-import {
-  DEFAULT_LEAGUE_ID,
-  isKnownLeagueId,
-  leagueCatalog,
-  loadLeagueDataset,
-} from "./data/leagues/catalog";
+import { DEFAULT_LEAGUE_ID, isKnownLeagueId, leagueCatalog, loadLeagueDataset } from "./data/leagues/catalog";
 import { buildTaskViews, filterAndSortTaskViews, summarizeProgress } from "./domain/leagues/selectTasks";
 import { countActiveFilters } from "./domain/leagues/filterState";
 import type { LeagueDataset } from "./domain/leagues/types";
@@ -30,7 +25,11 @@ function toggleId(ids: string[], id: string): string[] {
 }
 
 function makeExport(state: LeagueUserState, leagueName: string): void {
-  const payload = JSON.stringify({ app: "RuneScape Leagues Tracker", leagueName, exportedAt: new Date().toISOString(), state }, null, 2);
+  const payload = JSON.stringify(
+    { app: "RuneScape Leagues Tracker", leagueName, exportedAt: new Date().toISOString(), state },
+    null,
+    2,
+  );
   const url = URL.createObjectURL(new Blob([payload], { type: "application/json" }));
   const anchor = document.createElement("a");
   anchor.href = url;
@@ -128,7 +127,9 @@ export default function App() {
         <p className="eyebrow">Dataset error</p>
         <h1>Could not open {catalogEntry.name}</h1>
         <pre>{loadError}</pre>
-        <button className="primary-button" type="button" onClick={() => window.location.reload()}>Reload app</button>
+        <button className="primary-button" type="button" onClick={() => window.location.reload()}>
+          Reload app
+        </button>
       </main>
     );
   }
@@ -149,7 +150,9 @@ export default function App() {
       <header className="topbar">
         <div className="topbar__main">
           <div className="brand">
-            <span className="brand__mark" aria-hidden="true">L</span>
+            <span className="brand__mark" aria-hidden="true">
+              L
+            </span>
             <div>
               <p>RuneScape</p>
               <strong>League Ledger</strong>
@@ -171,30 +174,48 @@ export default function App() {
               }}
             >
               {leagueCatalog.map((entry) => (
-                <option value={entry.id} key={entry.id}>{entry.gameLabel} · {entry.name} ({entry.edition})</option>
+                <option value={entry.id} key={entry.id}>
+                  {entry.gameLabel} · {entry.edition} - {entry.name}
+                </option>
               ))}
             </select>
           </label>
 
           <div className="topbar__actions">
-            <button className="secondary-button" type="button" onClick={() => setIsStatsOpen(true)}>Player levels</button>
-            <button className="secondary-button topbar__export" type="button" onClick={() => makeExport(leagueState, manifest.name)}>Export save</button>
+            <button className="secondary-button" type="button" onClick={() => setIsStatsOpen(true)}>
+              Player levels
+            </button>
+            <button
+              className="secondary-button topbar__export"
+              type="button"
+              onClick={() => makeExport(leagueState, manifest.name)}
+            >
+              Export save
+            </button>
           </div>
         </div>
 
         <div className="topbar__context">
           <div className="league-heading">
             <div>
-              <span className={`game-chip game-chip--${manifest.game}`}>{manifest.game === "osrs" ? "Old School" : "RuneScape"}</span>
+              <span className={`game-chip game-chip--${manifest.game}`}>
+                {manifest.game === "osrs" ? "Old School" : "RuneScape"}
+              </span>
               {manifest.status === "partial" && <span className="status-chip">Published so far</span>}
             </div>
-            <h1>{manifest.shortName} <span>{manifest.edition}</span></h1>
+            <h1>
+              {manifest.shortName} <span>{manifest.edition}</span>
+            </h1>
           </div>
 
           <div className="overall-progress">
             <div className="overall-progress__labels">
-              <span><strong>{progress.completed.toLocaleString()}</strong> / {progress.total.toLocaleString()} tasks</span>
-              <span><strong>{progress.pointsEarned.toLocaleString()}</strong> pts · {progress.percent}%</span>
+              <span>
+                <strong>{progress.completed.toLocaleString()}</strong> / {progress.total.toLocaleString()} tasks
+              </span>
+              <span>
+                <strong>{progress.pointsEarned.toLocaleString()}</strong> pts · {progress.percent}%
+              </span>
             </div>
             <div className="progress-track progress-track--large" aria-label={`${progress.percent}% complete`}>
               <span style={{ width: `${progress.percent}%` }} />
@@ -204,7 +225,9 @@ export default function App() {
 
         <div className="searchbar">
           <label className="search-input">
-            <span className="search-input__icon" aria-hidden="true">⌕</span>
+            <span className="search-input__icon" aria-hidden="true">
+              ⌕
+            </span>
             <span className="sr-only">Search tasks</span>
             <input
               type="search"
@@ -222,13 +245,21 @@ export default function App() {
       {manifest.status === "partial" && (
         <div className="publication-notice" role="status">
           <span aria-hidden="true">i</span>
-          <p><strong>{manifest.expectedTaskCount?.toLocaleString()} tasks are available.</strong> This checked-in snapshot will expand when the Wiki publishes the remaining tiers.</p>
+          <p>
+            <strong>{manifest.expectedTaskCount?.toLocaleString()} tasks are available.</strong> This checked-in
+            snapshot will expand when the Wiki publishes the remaining tiers.
+          </p>
         </div>
       )}
 
       <main className="workspace">
         <aside className={`filters-shell${isFiltersOpen ? " filters-shell--open" : ""}`}>
-          <button className="filters-shell__backdrop" type="button" aria-label="Close filters" onClick={() => setIsFiltersOpen(false)} />
+          <button
+            className="filters-shell__backdrop"
+            type="button"
+            aria-label="Close filters"
+            onClick={() => setIsFiltersOpen(false)}
+          />
           <div className="filters-shell__content">
             <FiltersPanel
               manifest={manifest}
@@ -262,9 +293,21 @@ export default function App() {
                   isFavorite={view.isFavorite}
                   requirementStatus={view.requirementStatus}
                   note={leagueState.taskNotes[view.task.id] ?? ""}
-                  onToggleComplete={(taskId) => updateState((current) => ({ ...current, completedTaskIds: toggleId(current.completedTaskIds, taskId) }))}
-                  onToggleFavorite={(taskId) => updateState((current) => ({ ...current, favoriteTaskIds: toggleId(current.favoriteTaskIds, taskId) }))}
-                  onNoteChange={(taskId, note) => updateState((current) => ({ ...current, taskNotes: { ...current.taskNotes, [taskId]: note } }))}
+                  onToggleComplete={(taskId) =>
+                    updateState((current) => ({
+                      ...current,
+                      completedTaskIds: toggleId(current.completedTaskIds, taskId),
+                    }))
+                  }
+                  onToggleFavorite={(taskId) =>
+                    updateState((current) => ({
+                      ...current,
+                      favoriteTaskIds: toggleId(current.favoriteTaskIds, taskId),
+                    }))
+                  }
+                  onNoteChange={(taskId, note) =>
+                    updateState((current) => ({ ...current, taskNotes: { ...current.taskNotes, [taskId]: note } }))
+                  }
                 />
               ))}
             </div>
@@ -273,19 +316,31 @@ export default function App() {
               <span aria-hidden="true">⌕</span>
               <h3>No tasks match</h3>
               <p>Try a broader search or clear the active filters.</p>
-              <button className="primary-button" type="button" onClick={clearSearchAndFilters}>Show all tasks</button>
+              <button className="primary-button" type="button" onClick={clearSearchAndFilters}>
+                Show all tasks
+              </button>
             </div>
           )}
 
           {visibleViews.length < filteredViews.length && (
-            <button className="load-more" type="button" onClick={() => setVisibleLimit((limit) => limit + INITIAL_TASK_LIMIT)}>
+            <button
+              className="load-more"
+              type="button"
+              onClick={() => setVisibleLimit((limit) => limit + INITIAL_TASK_LIMIT)}
+            >
               Show {Math.min(INITIAL_TASK_LIMIT, filteredViews.length - visibleViews.length)} more
-              <span>{visibleViews.length.toLocaleString()} of {filteredViews.length.toLocaleString()} shown</span>
+              <span>
+                {visibleViews.length.toLocaleString()} of {filteredViews.length.toLocaleString()} shown
+              </span>
             </button>
           )}
 
           <footer className="data-credit">
-            Task data from the <a href={manifest.source.url} target="_blank" rel="noreferrer">RuneScape Wiki</a>, revision {manifest.source.revision ?? "unknown"}, under {manifest.source.license ?? "its stated license"}.
+            Task data from the{" "}
+            <a href={manifest.source.url} target="_blank" rel="noreferrer">
+              RuneScape Wiki
+            </a>
+            , revision {manifest.source.revision ?? "unknown"}, under {manifest.source.license ?? "its stated license"}.
           </footer>
         </section>
       </main>
@@ -294,7 +349,9 @@ export default function App() {
         <PlayerStatsModal
           manifest={manifest}
           stats={leagueState.stats}
-          onChange={(statId, value) => updateState((current) => ({ ...current, stats: { ...current.stats, [statId]: value } }))}
+          onChange={(statId, value) =>
+            updateState((current) => ({ ...current, stats: { ...current.stats, [statId]: value } }))
+          }
           onClose={() => setIsStatsOpen(false)}
         />
       )}

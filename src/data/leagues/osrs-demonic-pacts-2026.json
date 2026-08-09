@@ -14,7 +14,7 @@
       "url": "https://oldschool.runescape.wiki/w/Demonic_Pacts_League/Tasks",
       "license": "CC BY-SA 3.0",
       "revision": 15270808,
-      "importedAt": "2026-08-09T04:09:14.052Z"
+      "importedAt": "2026-08-09T06:04:45.573Z"
     },
     "expectedTaskCount": 1592,
     "rewardCurrencies": [
@@ -93,47 +93,58 @@
         "values": [
           {
             "id": "general",
-            "label": "General"
+            "label": "General",
+            "icon": "icons/regions/osrs/global.png"
           },
           {
             "id": "asgarnia",
-            "label": "Asgarnia"
+            "label": "Asgarnia",
+            "icon": "icons/regions/osrs/asgarnia.png"
           },
           {
             "id": "desert",
-            "label": "Desert"
+            "label": "Desert",
+            "icon": "icons/regions/osrs/desert.png"
           },
           {
             "id": "fremennik",
-            "label": "Fremennik"
+            "label": "Fremennik",
+            "icon": "icons/regions/osrs/fremennik.png"
           },
           {
             "id": "kandarin",
-            "label": "Kandarin"
+            "label": "Kandarin",
+            "icon": "icons/regions/osrs/kandarin.png"
           },
           {
             "id": "karamja",
-            "label": "Karamja"
+            "label": "Karamja",
+            "icon": "icons/regions/osrs/karamja.png"
           },
           {
             "id": "kourend",
-            "label": "Kourend"
+            "label": "Kourend",
+            "icon": "icons/regions/osrs/kourend.png"
           },
           {
             "id": "morytania",
-            "label": "Morytania"
+            "label": "Morytania",
+            "icon": "icons/regions/osrs/morytania.png"
           },
           {
             "id": "tirannwn",
-            "label": "Tirannwn"
+            "label": "Tirannwn",
+            "icon": "icons/regions/osrs/tirannwn.png"
           },
           {
             "id": "varlamore",
-            "label": "Varlamore"
+            "label": "Varlamore",
+            "icon": "icons/regions/osrs/varlamore.png"
           },
           {
             "id": "wilderness",
-            "label": "Wilderness"
+            "label": "Wilderness",
+            "icon": "icons/regions/osrs/wilderness.png"
           }
         ]
       }
@@ -146,7 +157,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/attack.png"
+        "icon": "icons/skills/osrs/attack.png"
       },
       {
         "id": "strength",
@@ -155,7 +166,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/strength.png"
+        "icon": "icons/skills/osrs/strength.png"
       },
       {
         "id": "defence",
@@ -164,7 +175,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/defence.png"
+        "icon": "icons/skills/osrs/defence.png"
       },
       {
         "id": "ranged",
@@ -173,7 +184,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/ranged.png"
+        "icon": "icons/skills/osrs/ranged.png"
       },
       {
         "id": "prayer",
@@ -182,7 +193,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/prayer.png"
+        "icon": "icons/skills/osrs/prayer.png"
       },
       {
         "id": "magic",
@@ -191,7 +202,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/magic.png"
+        "icon": "icons/skills/osrs/magic.png"
       },
       {
         "id": "hitpoints",
@@ -200,7 +211,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 10,
-        "icon": "icons/skills/hitpoints.png"
+        "icon": "icons/skills/osrs/hitpoints.png"
       },
       {
         "id": "runecraft",
@@ -209,7 +220,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/runecraft.png"
+        "icon": "icons/skills/osrs/runecraft.png"
       },
       {
         "id": "construction",
@@ -218,7 +229,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/construction.png"
+        "icon": "icons/skills/osrs/construction.png"
       },
       {
         "id": "agility",
@@ -227,7 +238,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/agility.png"
+        "icon": "icons/skills/osrs/agility.png"
       },
       {
         "id": "herblore",
@@ -236,7 +247,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/herblore.png"
+        "icon": "icons/skills/osrs/herblore.png"
       },
       {
         "id": "thieving",
@@ -245,7 +256,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/thieving.png"
+        "icon": "icons/skills/osrs/thieving.png"
       },
       {
         "id": "crafting",
@@ -254,7 +265,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/crafting.png"
+        "icon": "icons/skills/osrs/crafting.png"
       },
       {
         "id": "fletching",
@@ -263,7 +274,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/fletching.png"
+        "icon": "icons/skills/osrs/fletching.png"
       },
       {
         "id": "slayer",
@@ -272,7 +283,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/slayer.png"
+        "icon": "icons/skills/osrs/slayer.png"
       },
       {
         "id": "hunter",
@@ -281,7 +292,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/hunter.png"
+        "icon": "icons/skills/osrs/hunter.png"
       },
       {
         "id": "mining",
@@ -290,7 +301,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/mining.png"
+        "icon": "icons/skills/osrs/mining.png"
       },
       {
         "id": "smithing",
@@ -299,7 +310,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/smithing.png"
+        "icon": "icons/skills/osrs/smithing.png"
       },
       {
         "id": "fishing",
@@ -308,7 +319,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/fishing.png"
+        "icon": "icons/skills/osrs/fishing.png"
       },
       {
         "id": "cooking",
@@ -317,7 +328,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/cooking.png"
+        "icon": "icons/skills/osrs/cooking.png"
       },
       {
         "id": "firemaking",
@@ -326,7 +337,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/firemaking.png"
+        "icon": "icons/skills/osrs/firemaking.png"
       },
       {
         "id": "woodcutting",
@@ -335,7 +346,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/woodcutting.png"
+        "icon": "icons/skills/osrs/woodcutting.png"
       },
       {
         "id": "farming",
@@ -344,7 +355,7 @@
         "minimum": 1,
         "maximum": 99,
         "defaultValue": 1,
-        "icon": "icons/skills/farming.png"
+        "icon": "icons/skills/osrs/farming.png"
       },
       {
         "id": "sailing",

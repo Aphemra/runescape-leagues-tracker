@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import type { RequirementEvaluation } from "../domain/leagues/requirements";
 import type { LeagueManifest, LeagueTask } from "../domain/leagues/types";
 import { assetPath, collectStatRequirements, getFacetValueLabel, plainWikiText } from "../domain/leagues/presentation";
@@ -18,7 +18,7 @@ type TaskCardProps = {
 const REQUIREMENT_LABELS: Record<RequirementEvaluation, string> = {
   met: "Ready",
   unmet: "Levels needed",
-  unknown: "Check requirements",
+  unknown: "Check requirements in details drop-down",
 };
 
 export default function TaskCard({
@@ -40,8 +40,18 @@ export default function TaskCard({
   const isPactTask = task.extensions?.pactTask === true;
   const rawRequirement = plainWikiText(task.requirements.raw?.other || task.requirements.raw?.skills || "");
 
+  function handleCardClick(event: MouseEvent<HTMLElement>) {
+    const target = event.target as HTMLElement;
+
+    if (target.closest("button, input, textarea, select, a, label, .task-card__details")) {
+      return;
+    }
+
+    setIsExpanded((current) => !current);
+  }
+
   return (
-    <article className={`task-card${isCompleted ? " task-card--completed" : ""}`}>
+    <article className={`task-card${isCompleted ? " task-card--completed" : ""}`} onClick={handleCardClick}>
       <button
         className="task-card__check"
         type="button"
@@ -60,7 +70,9 @@ export default function TaskCard({
               <span className={`badge badge--tier badge--${task.tierId}`}>{tier?.label ?? task.tierId}</span>
               <span className="badge badge--points">{points.toLocaleString()} pts</span>
               {locations.map((location) => (
-                <span className="badge" key={location}>{location}</span>
+                <span className="badge" key={location}>
+                  {location}
+                </span>
               ))}
               {isPactTask && <span className="badge badge--pact">Pact</span>}
             </div>
@@ -90,7 +102,11 @@ export default function TaskCard({
               {statRequirements.map((requirement, index) => {
                 const stat = manifest.playerStats.find((entry) => entry.id === requirement.statId);
                 return (
-                  <span className="skill-requirement" key={`${requirement.statId}-${index}`} title={`${stat?.label ?? requirement.label ?? requirement.statId} ${requirement.minimum}`}>
+                  <span
+                    className="skill-requirement"
+                    key={`${requirement.statId}-${index}`}
+                    title={`${stat?.label ?? requirement.label ?? requirement.statId} ${requirement.minimum}`}
+                  >
                     {stat?.icon && <img src={assetPath(stat.icon)} alt="" />}
                     <span>{stat?.label ?? requirement.label ?? requirement.statId}</span>
                     <strong>{requirement.minimum}</strong>
@@ -100,30 +116,44 @@ export default function TaskCard({
             </div>
           )}
 
-          <button className="task-card__details-button" type="button" aria-expanded={isExpanded} onClick={() => setIsExpanded((value) => !value)}>
+          <button
+            className="task-card__details-button"
+            type="button"
+            aria-expanded={isExpanded}
+            onClick={() => setIsExpanded((value) => !value)}
+          >
             {isExpanded ? "Hide details" : note ? "Note added" : "Details & note"}
           </button>
         </div>
 
-        {isExpanded && (
-          <div className="task-card__details">
-            {task.requirements.parseStatus !== "complete" && (
-              <p>
-                <strong>Wiki requirement:</strong> {rawRequirement || "This requirement could not be evaluated automatically."}
-              </p>
-            )}
-            <label>
-              <span>Personal note</span>
-              <textarea
-                value={note}
-                rows={2}
-                maxLength={500}
-                placeholder="Add a route reminder, item note, or strategy…"
-                onChange={(event) => onNoteChange(task.id, event.target.value)}
-              />
-            </label>
+        <div
+          className={`accordion-region${isExpanded ? " accordion-region--open" : ""}`}
+          aria-hidden={!isExpanded}
+          inert={isExpanded ? undefined : true}
+        >
+          <div>
+            <div className="task-card__details">
+              {task.requirements.parseStatus !== "complete" && (
+                <p>
+                  <strong>Wiki requirement:</strong>{" "}
+                  {rawRequirement || "This requirement could not be evaluated automatically."}
+                </p>
+              )}
+
+              <label>
+                <span>Personal note</span>
+
+                <textarea
+                  value={note}
+                  rows={2}
+                  maxLength={500}
+                  placeholder="Add a route reminder, item note, or strategy…"
+                  onChange={(event) => onNoteChange(task.id, event.target.value)}
+                />
+              </label>
+            </div>
           </div>
-        )}
+        </div>
       </div>
     </article>
   );

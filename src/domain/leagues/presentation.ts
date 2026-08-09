@@ -22,7 +22,10 @@ export function plainWikiText(value: string): string {
 }
 
 export function getFacetValueLabel(manifest: LeagueManifest, facetId: string, valueId: string): string {
-  return manifest.facets.find((facet) => facet.id === facetId)?.values.find((value) => value.id === valueId)?.label ?? valueId;
+  return (
+    manifest.facets.find((facet) => facet.id === facetId)?.values.find((value) => value.id === valueId)?.label ??
+    valueId
+  );
 }
 
 export function assetPath(path: string): string {

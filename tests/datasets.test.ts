@@ -24,6 +24,11 @@ test("Demonic Pacts contains the complete Wiki dataset and every v1 migration al
 test("Equilibrium contains all currently published Easy and Medium tasks", () => {
   expect(equilibrium.tasks).toHaveLength(533);
   expect(
-    Object.fromEntries(equilibrium.manifest.tiers.map((tier) => [tier.id, equilibrium.tasks.filter((task) => task.tierId === tier.id).length])),
+    Object.fromEntries(
+      equilibrium.manifest.tiers.map((tier) => [
+        tier.id,
+        equilibrium.tasks.filter((task) => task.tierId === tier.id).length,
+      ]),
+    ),
   ).toEqual({ easy: 244, medium: 289 });
 });
