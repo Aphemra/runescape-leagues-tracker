@@ -18,7 +18,7 @@ type TaskCardProps = {
 const REQUIREMENT_LABELS: Record<RequirementEvaluation, string> = {
   met: "Ready",
   unmet: "Levels needed",
-  unknown: "Check requirements in details drop-down",
+  unknown: "Check details drop-down",
 };
 
 export default function TaskCard({
