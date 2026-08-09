@@ -1,0 +1,101 @@
+import type { LeagueDataset, LeagueTask } from "./types";
+import { evaluateRequirements, type RequirementEvaluation } from "./requirements";
+import type { LeagueFilterState, LeagueUserState } from "../storage/types";
+
+export type TaskView = {
+  task: LeagueTask;
+  originalIndex: number;
+  isCompleted: boolean;
+  isFavorite: boolean;
+  requirementStatus: RequirementEvaluation;
+  points: number;
+};
+
+export type ProgressSummary = {
+  completed: number;
+  total: number;
+  percent: number;
+  pointsEarned: number;
+  pointsAvailable: number;
+};
+
+function taskPoints(task: LeagueTask): number {
+  return task.rewards.reduce((total, reward) => total + reward.amount, 0);
+}
+
+function searchableText(task: LeagueTask): string {
+  return [
+    task.title,
+    task.description.plain,
+    task.tierId,
+    ...Object.values(task.facets).flat(),
+    task.requirements.raw?.skills ?? "",
+    task.requirements.raw?.other ?? "",
+  ]
+    .join(" ")
+    .toLocaleLowerCase();
+}
+
+export function buildTaskViews(dataset: LeagueDataset, state: LeagueUserState): TaskView[] {
+  const completed = new Set(state.completedTaskIds);
+  const favorites = new Set(state.favoriteTaskIds);
+
+  return dataset.tasks.map((task, originalIndex) => ({
+    task,
+    originalIndex,
+    isCompleted: completed.has(task.id),
+    isFavorite: favorites.has(task.id),
+    requirementStatus: evaluateRequirements(task.requirements, { stats: state.stats }),
+    points: taskPoints(task),
+  }));
+}
+
+export function filterAndSortTaskViews(
+  views: TaskView[],
+  filters: LeagueFilterState,
+  tierOrder: Map<string, number>,
+): TaskView[] {
+  const search = filters.search.trim().toLocaleLowerCase();
+  const tierIds = new Set(filters.tierIds);
+  const selectedFacets = Object.entries(filters.facets).filter(([, values]) => values.length > 0);
+
+  const filtered = views.filter((view) => {
+    if (filters.completion === "complete" && !view.isCompleted) return false;
+    if (filters.completion === "incomplete" && view.isCompleted) return false;
+    if (filters.requirements !== "all" && view.requirementStatus !== filters.requirements) return false;
+    if (filters.favoritesOnly && !view.isFavorite) return false;
+    if (tierIds.size > 0 && !tierIds.has(view.task.tierId)) return false;
+
+    for (const [facetId, selectedValues] of selectedFacets) {
+      const taskValues = view.task.facets[facetId] ?? [];
+      if (!selectedValues.some((value) => taskValues.includes(value))) return false;
+    }
+
+    return !search || searchableText(view.task).includes(search);
+  });
+
+  return filtered.sort((left, right) => {
+    let comparison = 0;
+    if (filters.sortField === "title") comparison = left.task.title.localeCompare(right.task.title);
+    if (filters.sortField === "tier") {
+      comparison = (tierOrder.get(left.task.tierId) ?? Number.MAX_SAFE_INTEGER) - (tierOrder.get(right.task.tierId) ?? Number.MAX_SAFE_INTEGER);
+    }
+    if (filters.sortField === "points") comparison = left.points - right.points;
+    if (comparison === 0) comparison = left.task.title.localeCompare(right.task.title);
+    if (comparison === 0) comparison = left.originalIndex - right.originalIndex;
+    return filters.sortDirection === "desc" ? comparison * -1 : comparison;
+  });
+}
+
+export function summarizeProgress(views: TaskView[]): ProgressSummary {
+  const completedViews = views.filter((view) => view.isCompleted);
+  const pointsAvailable = views.reduce((total, view) => total + view.points, 0);
+  const pointsEarned = completedViews.reduce((total, view) => total + view.points, 0);
+  return {
+    completed: completedViews.length,
+    total: views.length,
+    percent: views.length === 0 ? 0 : Math.round((completedViews.length / views.length) * 100),
+    pointsEarned,
+    pointsAvailable,
+  };
+}

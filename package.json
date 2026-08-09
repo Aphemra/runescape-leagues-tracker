@@ -1,13 +1,17 @@
 {
-  "name": "osrs-leagues-task-tracker",
+  "name": "runescape-leagues-tracker",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "import:wiki": "tsx scripts/import-wiki.ts all",
+    "import:wiki:demonic-pacts": "tsx scripts/import-wiki.ts osrs-demonic-pacts-2026",
+    "import:wiki:equilibrium": "tsx scripts/import-wiki.ts rs3-equilibrium-2026",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest run"
   },
   "dependencies": {
     "react": "^19.2.4",
@@ -26,6 +30,7 @@
     "tsx": "^4.21.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.0",
-    "vite": "^8.0.4"
+    "vite": "^8.0.4",
+    "vitest": "^4.1.10"
   }
 }

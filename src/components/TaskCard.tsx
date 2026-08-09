@@ -1,99 +1,127 @@
-import type { SkillName, Task, TaskTier } from "../types/task";
+import { useState } from "react";
+import type { RequirementEvaluation } from "../domain/leagues/requirements";
+import type { LeagueManifest, LeagueTask } from "../domain/leagues/types";
+import { assetPath, collectStatRequirements, getFacetValueLabel, plainWikiText } from "../domain/leagues/presentation";
 
 type TaskCardProps = {
-  task: Task;
-  taskId: string;
+  task: LeagueTask;
+  manifest: LeagueManifest;
   isCompleted: boolean;
-  isCompletable: boolean;
+  isFavorite: boolean;
+  requirementStatus: RequirementEvaluation;
+  note: string;
   onToggleComplete: (taskId: string) => void;
+  onToggleFavorite: (taskId: string) => void;
+  onNoteChange: (taskId: string, note: string) => void;
 };
 
-function getRegionIconPath(region: string): string {
-  return `/icons/regions/${region.toLowerCase()}.png`;
-}
+const REQUIREMENT_LABELS: Record<RequirementEvaluation, string> = {
+  met: "Ready",
+  unmet: "Levels needed",
+  unknown: "Check requirements",
+};
 
-function getSkillIconPath(skill: string): string {
-  return `/icons/skills/${skill.toLowerCase()}.png`;
-}
-
-function formatTier(tier: string): string {
-  return tier.toUpperCase();
-}
-
-function getTierBadgeClass(tier: TaskTier): string {
-  switch (tier) {
-    case "easy":
-      return "task-badge--easy";
-    case "medium":
-      return "task-badge--medium";
-    case "hard":
-      return "task-badge--hard";
-    case "elite":
-      return "task-badge--elite";
-    case "master":
-      return "task-badge--master";
-    default:
-      return "";
-  }
-}
-
-export default function TaskCard({ task, taskId, isCompleted, isCompletable, onToggleComplete }: TaskCardProps) {
-  const skillEntries = Object.entries(task.requirements.skills) as [SkillName, number][];
-  const hasSkills = skillEntries.length > 0;
-  const hasQuests = task.requirements.quests.length > 0;
-
-  const classNames = [
-    "task-row",
-    isCompleted ? "task-row--completed" : "",
-    task.pact ? "task-row--pact" : "",
-    isCompletable ? "task-row--completable" : "task-row--not-completable",
-  ]
-    .filter(Boolean)
-    .join(" ");
+export default function TaskCard({
+  task,
+  manifest,
+  isCompleted,
+  isFavorite,
+  requirementStatus,
+  note,
+  onToggleComplete,
+  onToggleFavorite,
+  onNoteChange,
+}: TaskCardProps) {
+  const [isExpanded, setIsExpanded] = useState(Boolean(note));
+  const tier = manifest.tiers.find((entry) => entry.id === task.tierId);
+  const statRequirements = collectStatRequirements(task.requirements.root);
+  const points = task.rewards.reduce((total, reward) => total + reward.amount, 0);
+  const locations = (task.facets.location ?? []).map((id) => getFacetValueLabel(manifest, "location", id));
+  const isPactTask = task.extensions?.pactTask === true;
+  const rawRequirement = plainWikiText(task.requirements.raw?.other || task.requirements.raw?.skills || "");
 
   return (
-    <article className={classNames}>
-      <div className="task-row__checkbox">
-        <input aria-label={`Mark ${task.name} complete`} type="checkbox" checked={isCompleted} onChange={() => onToggleComplete(taskId)} />
-      </div>
+    <article className={`task-card${isCompleted ? " task-card--completed" : ""}`}>
+      <button
+        className="task-card__check"
+        type="button"
+        aria-pressed={isCompleted}
+        aria-label={`${isCompleted ? "Mark" : "Mark"} ${task.title} ${isCompleted ? "incomplete" : "complete"}`}
+        onClick={() => onToggleComplete(task.id)}
+      >
+        <span aria-hidden="true">{isCompleted ? "✓" : ""}</span>
+      </button>
 
-      <div className="task-row__main">
-        <div className="task-row__top">
-          <div className="task-row__title-wrap">
-            <img className="task-row__region-icon" src={getRegionIconPath(task.region)} alt={task.region} title={task.region} />
-
-            <h2 className="task-row__title">{task.name}</h2>
+      <div className="task-card__body">
+        <div className="task-card__heading">
+          <div className="task-card__title-group">
+            <h2>{task.title}</h2>
+            <div className="task-card__badges" aria-label="Task metadata">
+              <span className={`badge badge--tier badge--${task.tierId}`}>{tier?.label ?? task.tierId}</span>
+              <span className="badge badge--points">{points.toLocaleString()} pts</span>
+              {locations.map((location) => (
+                <span className="badge" key={location}>{location}</span>
+              ))}
+              {isPactTask && <span className="badge badge--pact">Pact</span>}
+            </div>
           </div>
 
-          <div className="task-row__badges">
-            <span className={`task-badge task-badge--tier-points ${getTierBadgeClass(task.tier)}`}>
-              {formatTier(task.tier)} - {task.points}
-            </span>
-          </div>
+          <button
+            className={`icon-button task-card__favorite${isFavorite ? " is-active" : ""}`}
+            type="button"
+            aria-pressed={isFavorite}
+            aria-label={`${isFavorite ? "Remove" : "Add"} ${task.title} ${isFavorite ? "from" : "to"} favorites`}
+            onClick={() => onToggleFavorite(task.id)}
+          >
+            <span aria-hidden="true">★</span>
+          </button>
         </div>
 
-        <p className="task-row__description">{task.description}</p>
+        {task.description.plain && <p className="task-card__description">{task.description.plain}</p>}
 
-        {(hasSkills || hasQuests) && (
-          <div className="task-row__requirements">
-            {hasSkills && (
-              <div className="task-row__requirement-line">
-                <div className="task-row__skill-reqs">
-                  {skillEntries.map(([skill, level]) => (
-                    <div key={skill} className="task-row__skill-pill" title={`${skill} ${level}`}>
-                      <img className="task-row__skill-icon" src={getSkillIconPath(skill)} alt={skill} />
-                      <span>{level}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+        <div className="task-card__footer">
+          <div className={`requirement-status requirement-status--${requirementStatus}`}>
+            <span className="requirement-status__dot" aria-hidden="true" />
+            {REQUIREMENT_LABELS[requirementStatus]}
+          </div>
 
-            {hasQuests && (
-              <div className="task-row__requirement-line">
-                <p className="task-row__quest-text">Quests: {task.requirements.quests.join(", ")}</p>
-              </div>
+          {statRequirements.length > 0 && (
+            <div className="task-card__requirements" aria-label="Skill requirements">
+              {statRequirements.map((requirement, index) => {
+                const stat = manifest.playerStats.find((entry) => entry.id === requirement.statId);
+                return (
+                  <span className="skill-requirement" key={`${requirement.statId}-${index}`} title={`${stat?.label ?? requirement.label ?? requirement.statId} ${requirement.minimum}`}>
+                    {stat?.icon && <img src={assetPath(stat.icon)} alt="" />}
+                    <span>{stat?.label ?? requirement.label ?? requirement.statId}</span>
+                    <strong>{requirement.minimum}</strong>
+                  </span>
+                );
+              })}
+            </div>
+          )}
+
+          <button className="task-card__details-button" type="button" aria-expanded={isExpanded} onClick={() => setIsExpanded((value) => !value)}>
+            {isExpanded ? "Hide details" : note ? "Note added" : "Details & note"}
+          </button>
+        </div>
+
+        {isExpanded && (
+          <div className="task-card__details">
+            {task.requirements.parseStatus !== "complete" && (
+              <p>
+                <strong>Wiki requirement:</strong> {rawRequirement || "This requirement could not be evaluated automatically."}
+              </p>
             )}
+            <label>
+              <span>Personal note</span>
+              <textarea
+                value={note}
+                rows={2}
+                maxLength={500}
+                placeholder="Add a route reminder, item note, or strategy…"
+                onChange={(event) => onNoteChange(task.id, event.target.value)}
+              />
+            </label>
           </div>
         )}
       </div>
