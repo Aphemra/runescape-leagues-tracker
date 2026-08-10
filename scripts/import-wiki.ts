@@ -114,7 +114,7 @@ const IMPORTS: ImportDefinition[] = [
     name: "Equilibrium League",
     shortName: "Equilibrium",
     edition: "RuneScape League II",
-    status: "partial",
+    status: "complete",
     apiUrl: "https://runescape.wiki/api.php",
     wikiBaseUrl: "https://runescape.wiki/w/",
     sourcePage: "Equilibrium_League/Tasks",

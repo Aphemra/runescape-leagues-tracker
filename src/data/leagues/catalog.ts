@@ -17,7 +17,7 @@ export const leagueCatalog: LeagueCatalogEntry[] = [
     gameLabel: "RS3",
     name: "Equilibrium",
     edition: "League II",
-    status: "partial",
+    status: "complete",
   },
   {
     id: "osrs-demonic-pacts-2026",
