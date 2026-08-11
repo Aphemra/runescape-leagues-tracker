@@ -16,6 +16,7 @@ function buildDefaultFilters(): LeagueFilterState {
   return {
     search: "",
     tierIds: [],
+    skillIds: [],
     facets: {},
     completion: "all",
     requirements: "all",
@@ -53,6 +54,7 @@ function normalizeFilters(raw: unknown): LeagueFilterState {
   return {
     search: typeof value.search === "string" ? value.search : defaults.search,
     tierIds: stringArray(value.tierIds),
+    skillIds: stringArray(value.skillIds),
     facets: Object.fromEntries(Object.entries(rawFacets).map(([key, entries]) => [key, stringArray(entries)])),
     completion: value.completion === "complete" || value.completion === "incomplete" ? value.completion : "all",
     requirements:

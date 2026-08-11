@@ -14,7 +14,7 @@
       "url": "https://runescape.wiki/w/Equilibrium_League/Tasks",
       "license": "CC BY-SA 3.0",
       "revision": 37152583,
-      "importedAt": "2026-08-11T05:28:20.229Z"
+      "importedAt": "2026-08-11T05:40:50.278Z"
     },
     "expectedTaskCount": 1152,
     "rewardCurrencies": [
@@ -37389,7 +37389,6 @@
       },
       "extensions": {
         "usesSkills": [
-          "fishing",
           "fishing"
         ]
       },
@@ -41168,9 +41167,7 @@
           "smithing",
           "defence",
           "crafting",
-          "smithing",
           "farming",
-          "defence",
           "runecrafting",
           "magic"
         ]

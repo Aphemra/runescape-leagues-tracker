@@ -1,6 +1,7 @@
 import type { LeagueDataset, LeagueTask } from "./types";
 import { evaluateRequirements, type RequirementEvaluation } from "./requirements";
 import type { LeagueFilterState, LeagueUserState } from "../storage/types";
+import { getTaskSkillIds } from "./taskSkills";
 
 export type TaskView = {
   task: LeagueTask;
@@ -8,6 +9,7 @@ export type TaskView = {
   isCompleted: boolean;
   isFavorite: boolean;
   requirementStatus: RequirementEvaluation;
+  skillIds: string[];
   points: number;
 };
 
@@ -56,6 +58,7 @@ export function buildTaskViews(dataset: LeagueDataset, state: LeagueUserState): 
     requirementStatus: evaluateRequirements(task.requirements, {
       stats: effectiveStats,
     }),
+    skillIds: getTaskSkillIds(task, dataset.manifest),
     points: taskPoints(task),
   }));
 }
@@ -67,6 +70,7 @@ export function filterAndSortTaskViews(
 ): TaskView[] {
   const search = filters.search.trim().toLocaleLowerCase();
   const tierIds = new Set(filters.tierIds);
+  const skillIds = new Set(filters.skillIds);
   const selectedFacets = Object.entries(filters.facets).filter(([, values]) => values.length > 0);
 
   const filtered = views.filter((view) => {
@@ -74,7 +78,13 @@ export function filterAndSortTaskViews(
     if (filters.completion === "incomplete" && view.isCompleted) return false;
     if (filters.requirements !== "all" && view.requirementStatus !== filters.requirements) return false;
     if (filters.favoritesOnly && !view.isFavorite) return false;
-    if (tierIds.size > 0 && !tierIds.has(view.task.tierId)) return false;
+    if (tierIds.size > 0 && !tierIds.has(view.task.tierId)) {
+      return false;
+    }
+
+    if (skillIds.size > 0 && !view.skillIds.some((skillId) => skillIds.has(skillId))) {
+      return false;
+    }
 
     for (const [facetId, selectedValues] of selectedFacets) {
       const taskValues = view.task.facets[facetId] ?? [];

@@ -9,6 +9,7 @@ export type SortDirection = "asc" | "desc";
 export type LeagueFilterState = {
   search: string;
   tierIds: string[];
+  skillIds: string[];
   facets: Record<string, string[]>;
   completion: CompletionFilter;
   requirements: RequirementFilter;

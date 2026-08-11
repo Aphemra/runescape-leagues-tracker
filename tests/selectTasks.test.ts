@@ -98,3 +98,96 @@ test("summarizes task and point progress", () => {
     pointsAvailable: 50,
   });
 });
+
+test("skill filter includes requirements and use-only metadata", () => {
+  const state = buildDefaultLeagueState(manifest);
+
+  const requirementTask = task("requirement", "Catch a difficult fish", "medium", "skills", 30);
+
+  requirementTask.requirements = {
+    root: {
+      kind: "stat",
+      statId: "fishing",
+      minimum: 60,
+    },
+    parseStatus: "complete",
+  };
+
+  const useOnlyTask = task("use-only", "Chop a basic tree", "easy", "skills", 10);
+
+  useOnlyTask.extensions = {
+    usesSkills: ["woodcutting"],
+  };
+
+  const skillDataset: LeagueDataset = {
+    manifest,
+    tasks: [requirementTask, useOnlyTask, task("unrelated", "Defeat a goblin", "easy", "bosses", 10)],
+  };
+
+  const views = buildTaskViews(skillDataset, state);
+  const tierOrder = new Map([
+    ["easy", 0],
+    ["medium", 1],
+  ]);
+
+  const fishingResults = filterAndSortTaskViews(
+    views,
+    {
+      ...state.filters,
+      skillIds: ["fishing"],
+    },
+    tierOrder,
+  );
+
+  const woodcuttingResults = filterAndSortTaskViews(
+    views,
+    {
+      ...state.filters,
+      skillIds: ["woodcutting"],
+    },
+    tierOrder,
+  );
+
+  expect(fishingResults.map((view) => view.task.id)).toEqual(["requirement"]);
+
+  expect(woodcuttingResults.map((view) => view.task.id)).toEqual(["use-only"]);
+});
+
+test("skill filter infers clear skill actions without Wiki metadata", () => {
+  const woodcuttingManifest: LeagueDataset["manifest"] = {
+    ...manifest,
+    playerStats: [
+      ...manifest.playerStats,
+      {
+        id: "woodcutting",
+        label: "Woodcutting",
+        group: "Gathering",
+        minimum: 1,
+        maximum: 110,
+        virtualMaximum: 120,
+        defaultValue: 1,
+      },
+    ],
+  };
+
+  const basicTreeTask = task("basic-tree", "Chop 10 basic trees", "easy", "skills", 10);
+
+  const skillDataset: LeagueDataset = {
+    manifest: woodcuttingManifest,
+    tasks: [basicTreeTask],
+  };
+
+  const state = buildDefaultLeagueState(woodcuttingManifest);
+  const views = buildTaskViews(skillDataset, state);
+
+  const results = filterAndSortTaskViews(
+    views,
+    {
+      ...state.filters,
+      skillIds: ["woodcutting"],
+    },
+    new Map([["easy", 0]]),
+  );
+
+  expect(results.map((view) => view.task.id)).toEqual(["basic-tree"]);
+});

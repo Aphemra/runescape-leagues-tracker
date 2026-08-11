@@ -31,6 +31,7 @@ export default function FiltersPanel({
     onChange({
       ...filters,
       tierIds: [],
+      skillIds: [],
       facets: {},
       completion: "all",
       requirements: "all",
@@ -86,6 +87,28 @@ export default function FiltersPanel({
           ))}
         </div>
       </fieldset>
+
+      <div className="filter-group">
+        <label htmlFor="skill-filter">Skill</label>
+
+        <select
+          id="skill-filter"
+          value={filters.skillIds[0] ?? ""}
+          onChange={(event) =>
+            patch({
+              skillIds: event.target.value ? [event.target.value] : [],
+            })
+          }
+        >
+          <option value="">Any skill</option>
+
+          {manifest.playerStats.map((stat) => (
+            <option value={stat.id} key={stat.id}>
+              {stat.label}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {manifest.facets.map((facet) => (
         <fieldset className="filter-group" key={facet.id}>

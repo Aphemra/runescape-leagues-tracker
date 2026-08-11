@@ -114,6 +114,7 @@ export default function App() {
       ...leagueState.filters,
       search: "",
       tierIds: [],
+      skillIds: [],
       facets: {},
       completion: "all",
       requirements: "all",

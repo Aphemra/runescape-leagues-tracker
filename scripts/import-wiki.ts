@@ -327,8 +327,16 @@ function buildTask(
   } else {
     const clue = asString(row.clue).trim();
     if (clue) extensions.clue = clue;
-    if (Array.isArray(row.uses_skill))
-      extensions.usesSkills = row.uses_skill.map((entry) => normalizeStatId("rs3", entry));
+    const rawUsesSkills = Array.isArray(row.uses_skill) ? row.uses_skill : [asString(row.uses_skill)];
+
+    const usesSkills = rawUsesSkills
+      .flatMap((entry) => entry.split(","))
+      .map((entry) => normalizeStatId("rs3", entry))
+      .filter(Boolean);
+
+    if (usesSkills.length > 0) {
+      extensions.usesSkills = [...new Set(usesSkills)];
+    }
   }
 
   return {
