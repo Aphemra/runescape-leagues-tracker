@@ -6,7 +6,6 @@ import ProgressPanel from "./components/ProgressPanel";
 import TaskCard from "./components/TaskCard";
 import { DEFAULT_LEAGUE_ID, isKnownLeagueId, leagueCatalog, loadLeagueDataset } from "./data/leagues/catalog";
 import { buildTaskViews, filterAndSortTaskViews, summarizeProgress } from "./domain/leagues/selectTasks";
-import { countActiveFilters } from "./domain/leagues/filterState";
 import { MilestoneProgress } from "./components/MilestoneProgress";
 import type { LeagueDataset } from "./domain/leagues/types";
 import {
@@ -99,7 +98,6 @@ export default function App() {
   const progress = useMemo(() => summarizeProgress(taskViews), [taskViews]);
   const progressionTracks = dataset?.manifest.progressionTracks ?? [];
   const visibleViews = filteredViews.slice(0, visibleLimit);
-  const activeFilterCount = leagueState ? countActiveFilters(leagueState.filters) : 0;
 
   function updateState(updater: (current: LeagueUserState) => LeagueUserState) {
     setLeagueState((current) => (current ? updater(current) : current));
