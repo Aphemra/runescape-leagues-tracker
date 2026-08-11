@@ -31,6 +31,7 @@ type ImportDefinition = {
   bucket: string;
   fields: string[];
   playerStats: PlayerStatDefinition[];
+  progressionTracks?: LeagueManifest["progressionTracks"];
   mechanics: LeagueManifest["mechanics"];
 };
 
@@ -93,6 +94,37 @@ const IMPORTS: ImportDefinition[] = [
     bucket: "demonicpactleaguetask",
     fields: ["name", "description", "skill", "other", "tier", "region", "pact_task", "id", "completion"],
     playerStats: osrsPlayerStats,
+    progressionTracks: [
+      {
+        id: "relic-tiers",
+        label: "Relic tiers",
+        currencyId: "league-points",
+        milestones: [
+          { id: "tier-1", label: "Tier 1", threshold: 0 },
+          { id: "tier-2", label: "Tier 2", threshold: 600 },
+          { id: "tier-3", label: "Tier 3", threshold: 1_200 },
+          { id: "tier-4", label: "Tier 4", threshold: 2_600 },
+          { id: "tier-5", label: "Tier 5", threshold: 5_200 },
+          { id: "tier-6", label: "Tier 6", threshold: 8_500 },
+          { id: "tier-7", label: "Tier 7", threshold: 16_500 },
+          { id: "tier-8", label: "Tier 8", threshold: 28_000 },
+        ],
+      },
+      {
+        id: "trophies",
+        label: "League trophies",
+        currencyId: "league-points",
+        milestones: [
+          { id: "bronze", label: "Bronze", threshold: 2_000 },
+          { id: "iron", label: "Iron", threshold: 4_000 },
+          { id: "steel", label: "Steel", threshold: 10_000 },
+          { id: "mithril", label: "Mithril", threshold: 22_000 },
+          { id: "adamant", label: "Adamant", threshold: 32_000 },
+          { id: "rune", label: "Rune", threshold: 47_500 },
+          { id: "dragon", label: "Dragon", threshold: 65_000 },
+        ],
+      },
+    ],
     mechanics: [
       {
         id: "region-locking",
@@ -121,6 +153,36 @@ const IMPORTS: ImportDefinition[] = [
     bucket: "equilibrium_league_task",
     fields: ["name", "description", "skill", "other", "uses_skill", "tier", "region", "id", "clue"],
     playerStats: rs3PlayerStats,
+    progressionTracks: [
+      {
+        id: "relic-tiers",
+        label: "Relic tiers",
+        currencyId: "league-points",
+        milestones: [
+          { id: "tier-1", label: "Tier 1", threshold: 10 },
+          { id: "tier-2", label: "Tier 2", threshold: 750 },
+          { id: "tier-3", label: "Tier 3", threshold: 1_750 },
+          { id: "tier-4", label: "Tier 4", threshold: 3_500 },
+          { id: "tier-5", label: "Tier 5", threshold: 6_000 },
+          { id: "tier-6", label: "Tier 6", threshold: 12_000 },
+          { id: "tier-7", label: "Tier 7", threshold: 20_000 },
+        ],
+      },
+      {
+        id: "trophies",
+        label: "League trophies",
+        currencyId: "league-points",
+        milestones: [
+          { id: "bronze", label: "Bronze", threshold: 2_000 },
+          { id: "iron", label: "Iron", threshold: 4_000 },
+          { id: "steel", label: "Steel", threshold: 10_000 },
+          { id: "mithril", label: "Mithril", threshold: 17_000 },
+          { id: "adamant", label: "Adamant", threshold: 25_000 },
+          { id: "rune", label: "Rune", threshold: 35_000 },
+          { id: "dragon", label: "Dragon", threshold: 48_000 },
+        ],
+      },
+    ],
     mechanics: [
       {
         id: "region-locking",
@@ -409,6 +471,11 @@ async function importLeague(definition: ImportDefinition): Promise<void> {
     ],
     playerStats: definition.playerStats,
     mechanics: definition.mechanics,
+    ...(definition.progressionTracks
+      ? {
+          progressionTracks: definition.progressionTracks,
+        }
+      : {}),
   };
   const dataset: LeagueDataset = { manifest, tasks };
   const validation = validateLeagueDataset(dataset);

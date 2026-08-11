@@ -95,6 +95,19 @@ export type RewardCurrencyDefinition = {
   shortLabel: string;
 };
 
+export type ProgressionMilestoneDefinition = {
+  id: string;
+  label: string;
+  threshold: number;
+};
+
+export type ProgressionTrackDefinition = {
+  id: string;
+  label: string;
+  currencyId: string;
+  milestones: ProgressionMilestoneDefinition[];
+};
+
 export type FacetValueDefinition = {
   id: string;
   label: string;
@@ -147,6 +160,7 @@ export type LeagueManifest = {
   source: LeagueSourceDefinition;
   expectedTaskCount?: number;
   rewardCurrencies: RewardCurrencyDefinition[];
+  progressionTracks?: ProgressionTrackDefinition[];
   tiers: TierDefinition[];
   facets: FacetDefinition[];
   playerStats: PlayerStatDefinition[];

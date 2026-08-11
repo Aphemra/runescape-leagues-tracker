@@ -7,6 +7,7 @@ import TaskCard from "./components/TaskCard";
 import { DEFAULT_LEAGUE_ID, isKnownLeagueId, leagueCatalog, loadLeagueDataset } from "./data/leagues/catalog";
 import { buildTaskViews, filterAndSortTaskViews, summarizeProgress } from "./domain/leagues/selectTasks";
 import { countActiveFilters } from "./domain/leagues/filterState";
+import { MilestoneProgress } from "./components/MilestoneProgress";
 import type { LeagueDataset } from "./domain/leagues/types";
 import {
   buildDefaultLeagueState,
@@ -96,6 +97,7 @@ export default function App() {
     [leagueState, taskViews, tierOrder],
   );
   const progress = useMemo(() => summarizeProgress(taskViews), [taskViews]);
+  const progressionTracks = dataset?.manifest.progressionTracks ?? [];
   const visibleViews = filteredViews.slice(0, visibleLimit);
   const activeFilterCount = leagueState ? countActiveFilters(leagueState.filters) : 0;
 
@@ -221,6 +223,13 @@ export default function App() {
             <div className="progress-track progress-track--large" aria-label={`${progress.percent}% complete`}>
               <span style={{ width: `${progress.percent}%` }} />
             </div>
+            {progressionTracks.length > 0 && (
+              <div className="overall-progress__milestones">
+                {progressionTracks.map((track) => (
+                  <MilestoneProgress key={track.id} track={track} points={progress.pointsEarned} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
 

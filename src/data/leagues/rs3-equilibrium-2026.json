@@ -14,7 +14,7 @@
       "url": "https://runescape.wiki/w/Equilibrium_League/Tasks",
       "license": "CC BY-SA 3.0",
       "revision": 37152583,
-      "importedAt": "2026-08-11T05:40:50.278Z"
+      "importedAt": "2026-08-11T06:34:40.720Z"
     },
     "expectedTaskCount": 1152,
     "rewardCurrencies": [
@@ -462,6 +462,92 @@
         "config": {
           "extensionKey": "clue"
         }
+      }
+    ],
+    "progressionTracks": [
+      {
+        "id": "relic-tiers",
+        "label": "Relic tiers",
+        "currencyId": "league-points",
+        "milestones": [
+          {
+            "id": "tier-1",
+            "label": "Tier 1",
+            "threshold": 10
+          },
+          {
+            "id": "tier-2",
+            "label": "Tier 2",
+            "threshold": 750
+          },
+          {
+            "id": "tier-3",
+            "label": "Tier 3",
+            "threshold": 1750
+          },
+          {
+            "id": "tier-4",
+            "label": "Tier 4",
+            "threshold": 3500
+          },
+          {
+            "id": "tier-5",
+            "label": "Tier 5",
+            "threshold": 6000
+          },
+          {
+            "id": "tier-6",
+            "label": "Tier 6",
+            "threshold": 12000
+          },
+          {
+            "id": "tier-7",
+            "label": "Tier 7",
+            "threshold": 20000
+          }
+        ]
+      },
+      {
+        "id": "trophies",
+        "label": "League trophies",
+        "currencyId": "league-points",
+        "milestones": [
+          {
+            "id": "bronze",
+            "label": "Bronze",
+            "threshold": 2000
+          },
+          {
+            "id": "iron",
+            "label": "Iron",
+            "threshold": 4000
+          },
+          {
+            "id": "steel",
+            "label": "Steel",
+            "threshold": 10000
+          },
+          {
+            "id": "mithril",
+            "label": "Mithril",
+            "threshold": 17000
+          },
+          {
+            "id": "adamant",
+            "label": "Adamant",
+            "threshold": 25000
+          },
+          {
+            "id": "rune",
+            "label": "Rune",
+            "threshold": 35000
+          },
+          {
+            "id": "dragon",
+            "label": "Dragon",
+            "threshold": 48000
+          }
+        ]
       }
     ]
   },

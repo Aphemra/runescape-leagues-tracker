@@ -14,7 +14,7 @@
       "url": "https://oldschool.runescape.wiki/w/Demonic_Pacts_League/Tasks",
       "license": "CC BY-SA 3.0",
       "revision": 15270808,
-      "importedAt": "2026-08-11T05:28:19.942Z"
+      "importedAt": "2026-08-11T06:34:40.430Z"
     },
     "expectedTaskCount": 1592,
     "rewardCurrencies": [
@@ -406,6 +406,97 @@
         "config": {
           "extensionKey": "pactTask"
         }
+      }
+    ],
+    "progressionTracks": [
+      {
+        "id": "relic-tiers",
+        "label": "Relic tiers",
+        "currencyId": "league-points",
+        "milestones": [
+          {
+            "id": "tier-1",
+            "label": "Tier 1",
+            "threshold": 0
+          },
+          {
+            "id": "tier-2",
+            "label": "Tier 2",
+            "threshold": 600
+          },
+          {
+            "id": "tier-3",
+            "label": "Tier 3",
+            "threshold": 1200
+          },
+          {
+            "id": "tier-4",
+            "label": "Tier 4",
+            "threshold": 2600
+          },
+          {
+            "id": "tier-5",
+            "label": "Tier 5",
+            "threshold": 5200
+          },
+          {
+            "id": "tier-6",
+            "label": "Tier 6",
+            "threshold": 8500
+          },
+          {
+            "id": "tier-7",
+            "label": "Tier 7",
+            "threshold": 16500
+          },
+          {
+            "id": "tier-8",
+            "label": "Tier 8",
+            "threshold": 28000
+          }
+        ]
+      },
+      {
+        "id": "trophies",
+        "label": "League trophies",
+        "currencyId": "league-points",
+        "milestones": [
+          {
+            "id": "bronze",
+            "label": "Bronze",
+            "threshold": 2000
+          },
+          {
+            "id": "iron",
+            "label": "Iron",
+            "threshold": 4000
+          },
+          {
+            "id": "steel",
+            "label": "Steel",
+            "threshold": 10000
+          },
+          {
+            "id": "mithril",
+            "label": "Mithril",
+            "threshold": 22000
+          },
+          {
+            "id": "adamant",
+            "label": "Adamant",
+            "threshold": 32000
+          },
+          {
+            "id": "rune",
+            "label": "Rune",
+            "threshold": 47500
+          },
+          {
+            "id": "dragon",
+            "label": "Dragon",
+            "threshold": 65000
+          }
+        ]
       }
     ]
   },
