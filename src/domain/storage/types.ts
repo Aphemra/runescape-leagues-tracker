@@ -24,6 +24,7 @@ export type LeagueUserState = {
   favoriteTaskIds: string[];
   taskNotes: Record<string, string>;
   stats: Record<string, number>;
+  maxedStatIds: string[];
   filters: LeagueFilterState;
   updatedAt: string;
 };

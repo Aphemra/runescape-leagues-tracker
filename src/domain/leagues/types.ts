@@ -114,6 +114,7 @@ export type PlayerStatDefinition = {
   group: string;
   minimum: number;
   maximum: number;
+  virtualMaximum?: number;
   defaultValue: number;
   icon?: string;
 };

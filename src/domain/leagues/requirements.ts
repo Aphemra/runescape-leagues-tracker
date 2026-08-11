@@ -71,7 +71,9 @@ export function normalizeStats(manifest: LeagueManifest, raw: unknown): Record<s
   for (const definition of manifest.playerStats) {
     const value = values[definition.id];
     if (typeof value !== "number" || !Number.isFinite(value)) continue;
-    defaults[definition.id] = Math.min(definition.maximum, Math.max(definition.minimum, Math.floor(value)));
+    const virtualMaximum = definition.virtualMaximum ?? definition.maximum;
+
+    defaults[definition.id] = Math.min(virtualMaximum, Math.max(definition.minimum, Math.floor(value)));
   }
 
   return defaults;

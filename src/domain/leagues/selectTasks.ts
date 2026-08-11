@@ -39,13 +39,23 @@ function searchableText(task: LeagueTask): string {
 export function buildTaskViews(dataset: LeagueDataset, state: LeagueUserState): TaskView[] {
   const completed = new Set(state.completedTaskIds);
   const favorites = new Set(state.favoriteTaskIds);
+  const maxedStats = new Set(state.maxedStatIds);
+  const effectiveStats = { ...state.stats };
+
+  for (const stat of dataset.manifest.playerStats) {
+    if (maxedStats.has(stat.id)) {
+      effectiveStats[stat.id] = stat.maximum;
+    }
+  }
 
   return dataset.tasks.map((task, originalIndex) => ({
     task,
     originalIndex,
     isCompleted: completed.has(task.id),
     isFavorite: favorites.has(task.id),
-    requirementStatus: evaluateRequirements(task.requirements, { stats: state.stats }),
+    requirementStatus: evaluateRequirements(task.requirements, {
+      stats: effectiveStats,
+    }),
     points: taskPoints(task),
   }));
 }

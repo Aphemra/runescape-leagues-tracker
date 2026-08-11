@@ -5,7 +5,7 @@
     "game": "osrs",
     "name": "Demonic Pacts League",
     "shortName": "Demonic Pacts",
-    "edition": "OSRS League VI",
+    "edition": "League VI",
     "status": "complete",
     "contentVersion": "wiki-15270808",
     "source": {
@@ -14,7 +14,7 @@
       "url": "https://oldschool.runescape.wiki/w/Demonic_Pacts_League/Tasks",
       "license": "CC BY-SA 3.0",
       "revision": 15270808,
-      "importedAt": "2026-08-09T06:04:45.573Z"
+      "importedAt": "2026-08-11T05:28:19.942Z"
     },
     "expectedTaskCount": 1592,
     "rewardCurrencies": [
@@ -156,53 +156,9 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 99,
+        "virtualMaximum": 99,
         "defaultValue": 1,
         "icon": "icons/skills/osrs/attack.png"
-      },
-      {
-        "id": "strength",
-        "label": "Strength",
-        "group": "Combat",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/strength.png"
-      },
-      {
-        "id": "defence",
-        "label": "Defence",
-        "group": "Combat",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/defence.png"
-      },
-      {
-        "id": "ranged",
-        "label": "Ranged",
-        "group": "Combat",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/ranged.png"
-      },
-      {
-        "id": "prayer",
-        "label": "Prayer",
-        "group": "Combat",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/prayer.png"
-      },
-      {
-        "id": "magic",
-        "label": "Magic",
-        "group": "Combat",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/magic.png"
       },
       {
         "id": "hitpoints",
@@ -210,159 +166,227 @@
         "group": "Combat",
         "minimum": 1,
         "maximum": 99,
+        "virtualMaximum": 99,
         "defaultValue": 10,
         "icon": "icons/skills/osrs/hitpoints.png"
       },
       {
-        "id": "runecraft",
-        "label": "Runecraft",
-        "group": "Gathering and artisan",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/runecraft.png"
-      },
-      {
-        "id": "construction",
-        "label": "Construction",
-        "group": "Gathering and artisan",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/construction.png"
-      },
-      {
-        "id": "agility",
-        "label": "Agility",
-        "group": "Gathering and artisan",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/agility.png"
-      },
-      {
-        "id": "herblore",
-        "label": "Herblore",
-        "group": "Gathering and artisan",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/herblore.png"
-      },
-      {
-        "id": "thieving",
-        "label": "Thieving",
-        "group": "Gathering and artisan",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/thieving.png"
-      },
-      {
-        "id": "crafting",
-        "label": "Crafting",
-        "group": "Gathering and artisan",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/crafting.png"
-      },
-      {
-        "id": "fletching",
-        "label": "Fletching",
-        "group": "Gathering and artisan",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/fletching.png"
-      },
-      {
-        "id": "slayer",
-        "label": "Slayer",
-        "group": "Gathering and artisan",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/slayer.png"
-      },
-      {
-        "id": "hunter",
-        "label": "Hunter",
-        "group": "Gathering and artisan",
-        "minimum": 1,
-        "maximum": 99,
-        "defaultValue": 1,
-        "icon": "icons/skills/osrs/hunter.png"
-      },
-      {
         "id": "mining",
         "label": "Mining",
-        "group": "Gathering and artisan",
+        "group": "Gathering",
         "minimum": 1,
         "maximum": 99,
+        "virtualMaximum": 99,
         "defaultValue": 1,
         "icon": "icons/skills/osrs/mining.png"
       },
       {
-        "id": "smithing",
-        "label": "Smithing",
-        "group": "Gathering and artisan",
+        "id": "strength",
+        "label": "Strength",
+        "group": "Combat",
         "minimum": 1,
         "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/strength.png"
+      },
+      {
+        "id": "agility",
+        "label": "Agility",
+        "group": "Support",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/agility.png"
+      },
+      {
+        "id": "smithing",
+        "label": "Smithing",
+        "group": "Artisan",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
         "defaultValue": 1,
         "icon": "icons/skills/osrs/smithing.png"
       },
       {
-        "id": "fishing",
-        "label": "Fishing",
-        "group": "Gathering and artisan",
+        "id": "defence",
+        "label": "Defence",
+        "group": "Combat",
         "minimum": 1,
         "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/defence.png"
+      },
+      {
+        "id": "herblore",
+        "label": "Herblore",
+        "group": "Artisan",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/herblore.png"
+      },
+      {
+        "id": "fishing",
+        "label": "Fishing",
+        "group": "Gathering",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
         "defaultValue": 1,
         "icon": "icons/skills/osrs/fishing.png"
       },
       {
-        "id": "cooking",
-        "label": "Cooking",
-        "group": "Gathering and artisan",
+        "id": "ranged",
+        "label": "Ranged",
+        "group": "Combat",
         "minimum": 1,
         "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/ranged.png"
+      },
+      {
+        "id": "thieving",
+        "label": "Thieving",
+        "group": "Support",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/thieving.png"
+      },
+      {
+        "id": "cooking",
+        "label": "Cooking",
+        "group": "Artisan",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
         "defaultValue": 1,
         "icon": "icons/skills/osrs/cooking.png"
       },
       {
-        "id": "firemaking",
-        "label": "Firemaking",
-        "group": "Gathering and artisan",
+        "id": "prayer",
+        "label": "Prayer",
+        "group": "Combat",
         "minimum": 1,
         "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/prayer.png"
+      },
+      {
+        "id": "crafting",
+        "label": "Crafting",
+        "group": "Artisan",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/crafting.png"
+      },
+      {
+        "id": "firemaking",
+        "label": "Firemaking",
+        "group": "Artisan",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
         "defaultValue": 1,
         "icon": "icons/skills/osrs/firemaking.png"
       },
       {
-        "id": "woodcutting",
-        "label": "Woodcutting",
-        "group": "Gathering and artisan",
+        "id": "magic",
+        "label": "Magic",
+        "group": "Combat",
         "minimum": 1,
         "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/magic.png"
+      },
+      {
+        "id": "fletching",
+        "label": "Fletching",
+        "group": "Artisan",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/fletching.png"
+      },
+      {
+        "id": "woodcutting",
+        "label": "Woodcutting",
+        "group": "Gathering",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
         "defaultValue": 1,
         "icon": "icons/skills/osrs/woodcutting.png"
       },
       {
-        "id": "farming",
-        "label": "Farming",
-        "group": "Gathering and artisan",
+        "id": "runecraft",
+        "label": "Runecraft",
+        "group": "Artisan",
         "minimum": 1,
         "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/runecraft.png"
+      },
+      {
+        "id": "slayer",
+        "label": "Slayer",
+        "group": "Support",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/slayer.png"
+      },
+      {
+        "id": "farming",
+        "label": "Farming",
+        "group": "Gathering",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
         "defaultValue": 1,
         "icon": "icons/skills/osrs/farming.png"
       },
       {
-        "id": "sailing",
-        "label": "Sailing",
-        "group": "Gathering and artisan",
+        "id": "construction",
+        "label": "Construction",
+        "group": "Artisan",
         "minimum": 1,
         "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/construction.png"
+      },
+      {
+        "id": "hunter",
+        "label": "Hunter",
+        "group": "Gathering",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
+        "defaultValue": 1,
+        "icon": "icons/skills/osrs/hunter.png"
+      },
+      {
+        "id": "sailing",
+        "label": "Sailing",
+        "group": "Gathering",
+        "minimum": 1,
+        "maximum": 99,
+        "virtualMaximum": 99,
         "defaultValue": 1
       }
     ],

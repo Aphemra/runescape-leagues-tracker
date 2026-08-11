@@ -33,6 +33,7 @@ export function buildDefaultLeagueState(manifest: LeagueManifest): LeagueUserSta
     favoriteTaskIds: [],
     taskNotes: {},
     stats: normalizeStats(manifest, undefined),
+    maxedStatIds: [],
     filters: buildDefaultFilters(),
     updatedAt: new Date().toISOString(),
   };
@@ -85,6 +86,7 @@ export function loadLeagueState(manifest: LeagueManifest): LeagueUserState | nul
             )
           : {},
       stats: normalizeStats(manifest, raw.stats),
+      maxedStatIds: stringArray(raw.maxedStatIds),
       filters: normalizeFilters(raw.filters),
       updatedAt: typeof raw.updatedAt === "string" ? raw.updatedAt : new Date().toISOString(),
     };

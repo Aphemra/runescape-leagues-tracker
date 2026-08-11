@@ -1187,20 +1187,12 @@ input[type="checkbox"] {
 }
 
 .stats-groups {
-  padding: 0.3rem 1.1rem 1rem;
+  padding: 1rem 1.1rem;
 }
 
-.stats-group h3 {
-  position: sticky;
-  z-index: 2;
-  top: 0;
-  margin: 0;
-  padding: 0.85rem 0 0.45rem;
-  color: var(--text-muted);
-  background: #141b24;
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+.virtual-total {
+  color: var(--accent-bright);
+  font-weight: 750;
 }
 
 .stats-grid {
@@ -1211,7 +1203,7 @@ input[type="checkbox"] {
 
 .stat-input {
   display: grid;
-  grid-template-columns: 1.45rem minmax(0, 1fr) 4.25rem;
+  grid-template-columns: 1.45rem minmax(0, 1fr) 4.25rem 2rem;
   gap: 0.45rem;
   align-items: center;
   min-width: 0;
@@ -1219,6 +1211,18 @@ input[type="checkbox"] {
   border: 1px solid var(--border-subtle);
   border-radius: 0.55rem;
   background: #111821;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+}
+
+.stat-input--maxed {
+  border-color: #d9a441;
+  background: linear-gradient(90deg, rgba(217, 164, 65, 0.28) 0%, rgba(185, 123, 30, 0.14) 48%, #111821 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(242, 199, 93, 0.08),
+    0 0 0.8rem rgba(217, 164, 65, 0.08);
 }
 
 .stat-input img,
@@ -1239,7 +1243,7 @@ input[type="checkbox"] {
   text-transform: uppercase;
 }
 
-.stat-input > span:nth-child(2) {
+.stat-input__label {
   overflow: hidden;
   color: var(--text-muted);
   font-size: 0.72rem;
@@ -1247,13 +1251,57 @@ input[type="checkbox"] {
   white-space: nowrap;
 }
 
-.stat-input input {
+.stat-input--maxed .stat-input__label {
+  color: var(--text);
+}
+
+.stat-input input,
+.stat-input__maxed {
   min-width: 0;
   width: 100%;
   height: 2rem;
-  padding: 0.25rem 0.35rem;
   border-radius: 0.4rem;
   text-align: center;
+}
+
+.stat-input input {
+  padding: 0.25rem 0.35rem;
+}
+
+.stat-input__maxed {
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(242, 199, 93, 0.45);
+  color: #f2c75d;
+  background: rgba(20, 17, 10, 0.45);
+  font-size: 0.66rem;
+  font-weight: 850;
+  letter-spacing: 0.055em;
+}
+
+.stat-input__max-toggle {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 0.42rem;
+  color: var(--text-dim);
+  background: #0f151d;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+
+.stat-input__max-toggle:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.stat-input__max-toggle[aria-pressed="true"] {
+  border-color: #f2c75d;
+  color: #201705;
+  background: linear-gradient(135deg, #f1ca71, #b97b1e);
 }
 
 .status-screen {

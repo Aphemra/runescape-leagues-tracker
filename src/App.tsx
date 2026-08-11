@@ -349,8 +349,21 @@ export default function App() {
         <PlayerStatsModal
           manifest={manifest}
           stats={leagueState.stats}
+          maxedStatIds={leagueState.maxedStatIds}
           onChange={(statId, value) =>
-            updateState((current) => ({ ...current, stats: { ...current.stats, [statId]: value } }))
+            updateState((current) => ({
+              ...current,
+              stats: {
+                ...current.stats,
+                [statId]: value,
+              },
+            }))
+          }
+          onToggleMaxed={(statId) =>
+            updateState((current) => ({
+              ...current,
+              maxedStatIds: toggleId(current.maxedStatIds, statId),
+            }))
           }
           onClose={() => setIsStatsOpen(false)}
         />
