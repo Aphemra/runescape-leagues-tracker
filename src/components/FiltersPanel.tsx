@@ -140,11 +140,17 @@ export default function FiltersPanel({
               >
                 <option value="">Any skill</option>
 
-                {manifest.playerStats.map((stat) => (
-                  <option value={stat.id} key={stat.id}>
-                    {stat.label}
-                  </option>
-                ))}
+                {[...manifest.playerStats]
+                  .sort((left, right) =>
+                    left.label.localeCompare(right.label, undefined, {
+                      sensitivity: "base",
+                    }),
+                  )
+                  .map((stat) => (
+                    <option value={stat.id} key={stat.id}>
+                      {stat.label}
+                    </option>
+                  ))}
               </select>
             </div>
 
