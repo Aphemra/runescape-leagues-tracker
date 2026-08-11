@@ -213,33 +213,6 @@ export default function App() {
             </h1>
           </div>
 
-          <div className="searchbar">
-            <label className="search-input">
-              <span className="search-input__icon" aria-hidden="true">
-                ⌕
-              </span>
-
-              <span className="sr-only">Search tasks</span>
-
-              <input
-                type="search"
-                value={leagueState.filters.search}
-                placeholder="Search task, description, location, or requirement…"
-                onChange={(event) =>
-                  updateFilters({
-                    ...leagueState.filters,
-                    search: event.target.value,
-                  })
-                }
-              />
-            </label>
-
-            <button className="secondary-button filter-button" type="button" onClick={() => setIsFiltersOpen(true)}>
-              Filters
-              {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
-            </button>
-          </div>
-
           <div className="overall-progress">
             <div className="overall-progress__labels">
               <span>
@@ -263,6 +236,33 @@ export default function App() {
               ))}
             </div>
           )}
+        </div>
+
+        <div className="searchbar">
+          <label className="search-input">
+            <span className="search-input__icon" aria-hidden="true">
+              ⌕
+            </span>
+
+            <span className="sr-only">Search tasks</span>
+
+            <input
+              type="search"
+              value={leagueState.filters.search}
+              placeholder="Search task, description, location, or requirement…"
+              onChange={(event) =>
+                updateFilters({
+                  ...leagueState.filters,
+                  search: event.target.value,
+                })
+              }
+            />
+          </label>
+
+          <button className="secondary-button filter-button" type="button" onClick={() => setIsFiltersOpen(true)}>
+            Filters
+            {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
+          </button>
         </div>
       </header>
 

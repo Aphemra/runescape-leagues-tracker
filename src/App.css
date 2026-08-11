@@ -412,11 +412,15 @@ select {
   display: flex;
   gap: 0.65rem;
   padding-bottom: 0.75rem;
+  width: min(100% - 2rem, 76rem);
+  margin-inline: auto;
 }
 
 .search-input {
   position: relative;
   flex: 1;
+  min-width: 0;
+  width: 100%;
 }
 
 .search-input__icon {
