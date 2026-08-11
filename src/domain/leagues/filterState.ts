@@ -7,6 +7,7 @@ export function countActiveFilters(filters: LeagueFilterState): number {
     Object.values(filters.facets).filter((values) => values.length > 0).length +
     (filters.completion === "all" ? 0 : 1) +
     (filters.requirements === "all" ? 0 : 1) +
-    (filters.favoritesOnly ? 1 : 0)
+    (filters.favoritesOnly ? 1 : 0) +
+    (filters.hiddenOnly ? 1 : 0)
   );
 }

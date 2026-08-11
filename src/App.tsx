@@ -96,7 +96,12 @@ export default function App() {
     () => (leagueState ? filterAndSortTaskViews(taskViews, leagueState.filters, tierOrder) : []),
     [leagueState, taskViews, tierOrder],
   );
-  const progress = useMemo(() => summarizeProgress(taskViews), [taskViews]);
+  const activeTaskViews = useMemo(() => taskViews.filter((view) => !view.isHidden), [taskViews]);
+
+  const hiddenTaskCount = taskViews.length - activeTaskViews.length;
+
+  const progress = useMemo(() => summarizeProgress(activeTaskViews), [activeTaskViews]);
+
   const progressionTracks = dataset?.manifest.progressionTracks ?? [];
   const visibleViews = filteredViews.slice(0, visibleLimit);
   const activeFilterCount = leagueState ? countActiveFilters(leagueState.filters) : 0;
@@ -121,6 +126,7 @@ export default function App() {
       completion: "all",
       requirements: "all",
       favoritesOnly: false,
+      hiddenOnly: false,
     });
   }
 
@@ -289,13 +295,14 @@ export default function App() {
               manifest={manifest}
               filters={leagueState.filters}
               shownCount={filteredViews.length}
-              totalCount={taskViews.length}
+              totalCount={leagueState.filters.hiddenOnly ? hiddenTaskCount : activeTaskViews.length}
+              hiddenCount={hiddenTaskCount}
               onChange={updateFilters}
               onClose={() => setIsFiltersOpen(false)}
             />
             <ProgressPanel
               manifest={manifest}
-              views={taskViews}
+              views={activeTaskViews}
               selectedLocationIds={leagueState.filters.facets.location ?? []}
             />
           </div>
@@ -305,7 +312,10 @@ export default function App() {
           <div className="task-results__header">
             <div>
               <p className="eyebrow">Task list</p>
-              <h2 id="task-results-title">{filteredViews.length.toLocaleString()} matching tasks</h2>
+              <h2 id="task-results-title">
+                {filteredViews.length.toLocaleString()}{" "}
+                {leagueState.filters.hiddenOnly ? "hidden tasks" : "matching tasks"}
+              </h2>
             </div>
             <p>{progress.completed.toLocaleString()} complete overall</p>
           </div>
@@ -319,6 +329,7 @@ export default function App() {
                   manifest={manifest}
                   isCompleted={view.isCompleted}
                   isFavorite={view.isFavorite}
+                  isHidden={view.isHidden}
                   requirementStatus={view.requirementStatus}
                   note={leagueState.taskNotes[view.task.id] ?? ""}
                   onToggleComplete={(taskId) =>
@@ -333,6 +344,12 @@ export default function App() {
                       favoriteTaskIds: toggleId(current.favoriteTaskIds, taskId),
                     }))
                   }
+                  onToggleHidden={(taskId) =>
+                    updateState((current) => ({
+                      ...current,
+                      hiddenTaskIds: toggleId(current.hiddenTaskIds, taskId),
+                    }))
+                  }
                   onNoteChange={(taskId, note) =>
                     updateState((current) => ({ ...current, taskNotes: { ...current.taskNotes, [taskId]: note } }))
                   }
@@ -341,11 +358,26 @@ export default function App() {
             </div>
           ) : (
             <div className="empty-state">
-              <span aria-hidden="true">⌕</span>
-              <h3>No tasks match</h3>
-              <p>Try a broader search or clear the active filters.</p>
+              <span aria-hidden="true">{leagueState.filters.hiddenOnly ? "⊘" : "⌕"}</span>
+
+              <h3>
+                {leagueState.filters.hiddenOnly
+                  ? hiddenTaskCount === 0
+                    ? "No hidden tasks"
+                    : "No hidden tasks match"
+                  : "No tasks match"}
+              </h3>
+
+              <p>
+                {leagueState.filters.hiddenOnly
+                  ? hiddenTaskCount === 0
+                    ? "Tasks you hide will remain available here."
+                    : "The hidden tasks are being excluded by another active filter."
+                  : "Try a broader search or clear the active filters."}
+              </p>
+
               <button className="primary-button" type="button" onClick={clearSearchAndFilters}>
-                Show all tasks
+                {leagueState.filters.hiddenOnly ? "Return to active tasks" : "Show all tasks"}
               </button>
             </div>
           )}

@@ -8,6 +8,7 @@ export type TaskView = {
   originalIndex: number;
   isCompleted: boolean;
   isFavorite: boolean;
+  isHidden: boolean;
   requirementStatus: RequirementEvaluation;
   skillIds: string[];
   points: number;
@@ -41,6 +42,7 @@ function searchableText(task: LeagueTask): string {
 export function buildTaskViews(dataset: LeagueDataset, state: LeagueUserState): TaskView[] {
   const completed = new Set(state.completedTaskIds);
   const favorites = new Set(state.favoriteTaskIds);
+  const hidden = new Set(state.hiddenTaskIds);
   const maxedStats = new Set(state.maxedStatIds);
   const effectiveStats = { ...state.stats };
 
@@ -55,6 +57,7 @@ export function buildTaskViews(dataset: LeagueDataset, state: LeagueUserState): 
     originalIndex,
     isCompleted: completed.has(task.id),
     isFavorite: favorites.has(task.id),
+    isHidden: hidden.has(task.id),
     requirementStatus: evaluateRequirements(task.requirements, {
       stats: effectiveStats,
     }),
@@ -74,6 +77,8 @@ export function filterAndSortTaskViews(
   const selectedFacets = Object.entries(filters.facets).filter(([, values]) => values.length > 0);
 
   const filtered = views.filter((view) => {
+    if (filters.hiddenOnly !== view.isHidden) return false;
+
     if (filters.completion === "complete" && !view.isCompleted) return false;
     if (filters.completion === "incomplete" && view.isCompleted) return false;
     if (filters.requirements !== "all" && view.requirementStatus !== filters.requirements) return false;
@@ -110,13 +115,18 @@ export function filterAndSortTaskViews(
 }
 
 export function summarizeProgress(views: TaskView[]): ProgressSummary {
-  const completedViews = views.filter((view) => view.isCompleted);
-  const pointsAvailable = views.reduce((total, view) => total + view.points, 0);
+  const includedViews = views.filter((view) => !view.isHidden);
+
+  const completedViews = includedViews.filter((view) => view.isCompleted);
+
+  const pointsAvailable = includedViews.reduce((total, view) => total + view.points, 0);
+
   const pointsEarned = completedViews.reduce((total, view) => total + view.points, 0);
+
   return {
     completed: completedViews.length,
-    total: views.length,
-    percent: views.length === 0 ? 0 : Math.round((completedViews.length / views.length) * 100),
+    total: includedViews.length,
+    percent: includedViews.length === 0 ? 0 : Math.round((completedViews.length / includedViews.length) * 100),
     pointsEarned,
     pointsAvailable,
   };

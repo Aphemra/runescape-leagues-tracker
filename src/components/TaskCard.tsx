@@ -8,10 +8,12 @@ type TaskCardProps = {
   manifest: LeagueManifest;
   isCompleted: boolean;
   isFavorite: boolean;
+  isHidden: boolean;
   requirementStatus: RequirementEvaluation;
   note: string;
   onToggleComplete: (taskId: string) => void;
   onToggleFavorite: (taskId: string) => void;
+  onToggleHidden: (taskId: string) => void;
   onNoteChange: (taskId: string, note: string) => void;
 };
 
@@ -26,10 +28,12 @@ export default function TaskCard({
   manifest,
   isCompleted,
   isFavorite,
+  isHidden,
   requirementStatus,
   note,
   onToggleComplete,
   onToggleFavorite,
+  onToggleHidden,
   onNoteChange,
 }: TaskCardProps) {
   const [isExpanded, setIsExpanded] = useState(Boolean(note));
@@ -51,7 +55,10 @@ export default function TaskCard({
   }
 
   return (
-    <article className={`task-card${isCompleted ? " task-card--completed" : ""}`} onClick={handleCardClick}>
+    <article
+      className={`task-card${isCompleted ? " task-card--completed" : ""}${isHidden ? " task-card--hidden" : ""}`}
+      onClick={handleCardClick}
+    >
       <button
         className="task-card__check"
         type="button"
@@ -75,6 +82,7 @@ export default function TaskCard({
                 </span>
               ))}
               {isPactTask && <span className="badge badge--pact">Pact</span>}
+              {isHidden && <span className="badge badge--hidden">Hidden</span>}
             </div>
           </div>
 
@@ -115,6 +123,16 @@ export default function TaskCard({
               })}
             </div>
           )}
+
+          <button
+            className={`task-card__visibility-button${isHidden ? " is-restore" : ""}`}
+            type="button"
+            aria-label={`${isHidden ? "Restore" : "Hide"} ${task.title}`}
+            onClick={() => onToggleHidden(task.id)}
+          >
+            <span aria-hidden="true">{isHidden ? "↶" : "⊘"}</span>
+            {isHidden ? "Restore task" : "Hide task"}
+          </button>
 
           <button
             className="task-card__details-button"

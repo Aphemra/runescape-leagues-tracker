@@ -21,6 +21,7 @@ function buildDefaultFilters(): LeagueFilterState {
     completion: "all",
     requirements: "all",
     favoritesOnly: false,
+    hiddenOnly: false,
     sortField: "title",
     sortDirection: "asc",
   };
@@ -32,6 +33,7 @@ export function buildDefaultLeagueState(manifest: LeagueManifest): LeagueUserSta
     leagueId: manifest.id,
     completedTaskIds: [],
     favoriteTaskIds: [],
+    hiddenTaskIds: [],
     taskNotes: {},
     stats: normalizeStats(manifest, undefined),
     maxedStatIds: [],
@@ -62,6 +64,7 @@ function normalizeFilters(raw: unknown): LeagueFilterState {
         ? value.requirements
         : "all",
     favoritesOnly: typeof value.favoritesOnly === "boolean" ? value.favoritesOnly : false,
+    hiddenOnly: typeof value.hiddenOnly === "boolean" ? value.hiddenOnly : false,
     sortField: value.sortField === "tier" || value.sortField === "points" ? value.sortField : "title",
     sortDirection: value.sortDirection === "desc" ? "desc" : "asc",
   };
@@ -81,6 +84,7 @@ export function loadLeagueState(manifest: LeagueManifest): LeagueUserState | nul
       leagueId: manifest.id,
       completedTaskIds: stringArray(raw.completedTaskIds),
       favoriteTaskIds: stringArray(raw.favoriteTaskIds),
+      hiddenTaskIds: stringArray(raw.hiddenTaskIds),
       taskNotes:
         raw.taskNotes && typeof raw.taskNotes === "object" && !Array.isArray(raw.taskNotes)
           ? Object.fromEntries(

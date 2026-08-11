@@ -99,6 +99,42 @@ test("summarizes task and point progress", () => {
   });
 });
 
+test("hidden tasks are excluded from normal results and progress", () => {
+  const state = buildDefaultLeagueState(manifest);
+
+  state.completedTaskIds = ["one", "two"];
+  state.hiddenTaskIds = ["two"];
+
+  const views = buildTaskViews(dataset, state);
+  const tierOrder = new Map([
+    ["easy", 0],
+    ["medium", 1],
+  ]);
+
+  const visibleResults = filterAndSortTaskViews(views, state.filters, tierOrder);
+
+  const hiddenResults = filterAndSortTaskViews(
+    views,
+    {
+      ...state.filters,
+      hiddenOnly: true,
+    },
+    tierOrder,
+  );
+
+  expect(visibleResults.map((view) => view.task.id)).toEqual(["one", "three"]);
+
+  expect(hiddenResults.map((view) => view.task.id)).toEqual(["two"]);
+
+  expect(summarizeProgress(views)).toEqual({
+    completed: 1,
+    total: 2,
+    percent: 50,
+    pointsEarned: 10,
+    pointsAvailable: 20,
+  });
+});
+
 test("skill filter includes requirements and use-only metadata", () => {
   const state = buildDefaultLeagueState(manifest);
 

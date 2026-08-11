@@ -9,6 +9,7 @@ type FiltersPanelProps = {
   filters: LeagueFilterState;
   shownCount: number;
   totalCount: number;
+  hiddenCount: number;
   onChange: (filters: LeagueFilterState) => void;
   onClose: () => void;
 };
@@ -22,6 +23,7 @@ export default function FiltersPanel({
   filters,
   shownCount,
   totalCount,
+  hiddenCount,
   onChange,
   onClose,
 }: FiltersPanelProps) {
@@ -38,6 +40,7 @@ export default function FiltersPanel({
       completion: "all",
       requirements: "all",
       favoritesOnly: false,
+      hiddenOnly: false,
     });
   }
 
@@ -215,6 +218,26 @@ export default function FiltersPanel({
                 </span>
 
                 <span>Favorites only</span>
+              </button>
+
+              <button
+                className="hidden-toggle"
+                type="button"
+                aria-pressed={filters.hiddenOnly}
+                disabled={hiddenCount === 0 && !filters.hiddenOnly}
+                onClick={() =>
+                  patch({
+                    hiddenOnly: !filters.hiddenOnly,
+                  })
+                }
+              >
+                <span className="hidden-toggle__icon" aria-hidden="true">
+                  ⊘
+                </span>
+
+                <span>{filters.hiddenOnly ? "Viewing hidden tasks" : "Hidden tasks"}</span>
+
+                <span className="hidden-toggle__count">{hiddenCount.toLocaleString()}</span>
               </button>
             </div>
 

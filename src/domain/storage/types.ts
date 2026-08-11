@@ -14,6 +14,7 @@ export type LeagueFilterState = {
   completion: CompletionFilter;
   requirements: RequirementFilter;
   favoritesOnly: boolean;
+  hiddenOnly: boolean;
   sortField: TaskSortField;
   sortDirection: SortDirection;
 };
@@ -23,6 +24,7 @@ export type LeagueUserState = {
   leagueId: string;
   completedTaskIds: string[];
   favoriteTaskIds: string[];
+  hiddenTaskIds: string[];
   taskNotes: Record<string, string>;
   stats: Record<string, number>;
   maxedStatIds: string[];
