@@ -204,8 +204,10 @@ export default function App() {
               <span className={`game-chip game-chip--${manifest.game}`}>
                 {manifest.game === "osrs" ? "Old School" : "RuneScape"}
               </span>
+
               {manifest.status === "partial" && <span className="status-chip">Published so far</span>}
             </div>
+
             <h1>
               {manifest.shortName} <span>{manifest.edition}</span>
             </h1>
@@ -216,39 +218,24 @@ export default function App() {
               <span>
                 <strong>{progress.completed.toLocaleString()}</strong> / {progress.total.toLocaleString()} tasks
               </span>
+
               <span>
                 <strong>{progress.pointsEarned.toLocaleString()}</strong> pts · {progress.percent}%
               </span>
             </div>
+
             <div className="progress-track progress-track--large" aria-label={`${progress.percent}% complete`}>
               <span style={{ width: `${progress.percent}%` }} />
             </div>
-            {progressionTracks.length > 0 && (
-              <div className="overall-progress__milestones">
-                {progressionTracks.map((track) => (
-                  <MilestoneProgress key={track.id} track={track} points={progress.pointsEarned} />
-                ))}
-              </div>
-            )}
           </div>
-        </div>
 
-        <div className="searchbar">
-          <label className="search-input">
-            <span className="search-input__icon" aria-hidden="true">
-              ⌕
-            </span>
-            <span className="sr-only">Search tasks</span>
-            <input
-              type="search"
-              value={leagueState.filters.search}
-              placeholder="Search task, description, location, or requirement…"
-              onChange={(event) => updateFilters({ ...leagueState.filters, search: event.target.value })}
-            />
-          </label>
-          <button className="secondary-button filter-button" type="button" onClick={() => setIsFiltersOpen(true)}>
-            Filters {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
-          </button>
+          {progressionTracks.length > 0 && (
+            <div className="overall-progress__milestones">
+              {progressionTracks.map((track) => (
+                <MilestoneProgress key={track.id} track={track} points={progress.pointsEarned} />
+              ))}
+            </div>
+          )}
         </div>
       </header>
 
