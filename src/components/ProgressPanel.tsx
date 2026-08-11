@@ -5,26 +5,35 @@ import { summarizeProgress, type TaskView } from "../domain/leagues/selectTasks"
 type ProgressPanelProps = {
   manifest: LeagueManifest;
   views: TaskView[];
+  selectedLocationIds: string[];
 };
 
-export default function ProgressPanel({ manifest, views }: ProgressPanelProps) {
+export default function ProgressPanel({ manifest, views, selectedLocationIds }: ProgressPanelProps) {
   const [isOpen, setIsOpen] = useState(false);
   const locationFacet = manifest.facets.find((facet) => facet.id === "location");
 
   const entries = useMemo(() => {
-    if (!locationFacet) return [];
+    if (!locationFacet || selectedLocationIds.length === 0) {
+      return [];
+    }
 
-    return locationFacet.values.map((value) => {
-      const locationViews = views.filter((view) => view.task.facets.location?.includes(value.id));
+    const selectedLocations = new Set(selectedLocationIds);
 
-      return {
-        value,
-        progress: summarizeProgress(locationViews),
-      };
-    });
-  }, [locationFacet, views]);
+    return locationFacet.values
+      .filter((value) => selectedLocations.has(value.id))
+      .map((value) => {
+        const locationViews = views.filter((view) => view.task.facets.location?.includes(value.id));
 
-  if (entries.length === 0) return null;
+        return {
+          value,
+          progress: summarizeProgress(locationViews),
+        };
+      });
+  }, [locationFacet, selectedLocationIds, views]);
+
+  if (!locationFacet || entries.length === 0) {
+    return null;
+  }
 
   return (
     <section className="progress-panel">
@@ -32,9 +41,10 @@ export default function ProgressPanel({ manifest, views }: ProgressPanelProps) {
         className="progress-panel__toggle"
         type="button"
         aria-expanded={isOpen}
+        aria-controls="location-progress-content"
         onClick={() => setIsOpen((current) => !current)}
       >
-        <span>Progress by {locationFacet?.label.toLocaleLowerCase()}</span>
+        <span>Progress by {locationFacet.label.toLocaleLowerCase()}</span>
 
         <span className="progress-panel__chevron" aria-hidden="true">
           ▾
@@ -42,6 +52,7 @@ export default function ProgressPanel({ manifest, views }: ProgressPanelProps) {
       </button>
 
       <div
+        id="location-progress-content"
         className={`accordion-region${isOpen ? " accordion-region--open" : ""}`}
         aria-hidden={!isOpen}
         inert={isOpen ? undefined : true}
@@ -52,6 +63,7 @@ export default function ProgressPanel({ manifest, views }: ProgressPanelProps) {
               <div className="mini-progress" key={value.id}>
                 <div>
                   <span>{value.label}</span>
+
                   <span>
                     {progress.completed}/{progress.total}
                   </span>

@@ -270,7 +270,11 @@ export default function App() {
               onChange={updateFilters}
               onClose={() => setIsFiltersOpen(false)}
             />
-            <ProgressPanel manifest={manifest} views={taskViews} />
+            <ProgressPanel
+              manifest={manifest}
+              views={taskViews}
+              selectedLocationIds={leagueState.filters.facets.location ?? []}
+            />
           </div>
         </aside>
 
