@@ -72,10 +72,21 @@ export default function PlayerStatsModal({
               const virtualMaximum = stat.virtualMaximum ?? stat.maximum;
               const value = stats[stat.id] ?? stat.defaultValue;
               const isMaxed = maxedStats.has(stat.id);
+
+              const isVirtualCap = isMaxed || value >= virtualMaximum;
+
+              const isLevelCap = !isVirtualCap && value >= stat.maximum;
+
+              const capClassName = isVirtualCap
+                ? " stat-input--virtual-cap"
+                : isLevelCap
+                  ? " stat-input--level-cap"
+                  : "";
+
               const inputId = `player-stat-${stat.id}`;
 
               return (
-                <div className={`stat-input${isMaxed ? " stat-input--maxed" : ""}`} key={stat.id}>
+                <div className={`stat-input${isMaxed ? " stat-input--maxed" : ""}${capClassName}`} key={stat.id}>
                   {stat.icon ? (
                     <img src={assetPath(stat.icon)} alt="" />
                   ) : (

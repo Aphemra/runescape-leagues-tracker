@@ -1505,6 +1505,28 @@ input[type="checkbox"] {
     0 0 0.8rem rgba(217, 164, 65, 0.08);
 }
 
+.stat-input--level-cap {
+  border-color: #4e9dd1;
+  box-shadow:
+    inset 0 0 0 1px rgba(89, 174, 226, 0.14),
+    0 0 0.7rem rgba(61, 146, 202, 0.16);
+}
+
+.stat-input--virtual-cap {
+  border-color: #55ad7a;
+  box-shadow:
+    inset 0 0 0 1px rgba(100, 201, 139, 0.16),
+    0 0 0.7rem rgba(65, 168, 106, 0.17);
+}
+
+.stat-input--level-cap .stat-input__label {
+  color: #a9d8f3;
+}
+
+.stat-input--virtual-cap .stat-input__label {
+  color: #a7dfba;
+}
+
 .stat-input img,
 .stat-input__fallback {
   width: 1.35rem;
