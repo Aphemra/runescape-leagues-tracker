@@ -15596,10 +15596,10 @@
     {
       "id": "rs3-equilibrium-2026:wiki:434",
       "leagueId": "rs3-equilibrium-2026",
-      "title": "Fletch 50 maple shieldbow (unstrung) in Kandarin.",
+      "title": "Fletch 50 maple longbow (unstrung) in Kandarin.",
       "description": {
-        "plain": "Fletch 50 unstrung maple shieldbows in Kandarin.",
-        "wiki": "Fletch 50 [[Maple shieldbow (unstrung)|unstrung maple shieldbows]] in [[Kandarin]]."
+        "plain": "Fletch 50 unstrung maple longbows in Kandarin.",
+        "wiki": "Fletch 50 [[Maple longbow (unstrung)|unstrung maple longbows]] in [[Kandarin]]."
       },
       "tierId": "medium",
       "rewards": [
@@ -31016,10 +31016,10 @@
     {
       "id": "rs3-equilibrium-2026:wiki:883",
       "leagueId": "rs3-equilibrium-2026",
-      "title": "Equip a maple shieldbow.",
+      "title": "Equip a maple longbow.",
       "description": {
-        "plain": "Equip a maple shieldbow.",
-        "wiki": "Equip a [[maple shieldbow]]."
+        "plain": "Equip a maple longbow.",
+        "wiki": "Equip a [[maple longbow]]."
       },
       "tierId": "medium",
       "rewards": [
@@ -31072,10 +31072,10 @@
     {
       "id": "rs3-equilibrium-2026:wiki:884",
       "leagueId": "rs3-equilibrium-2026",
-      "title": "Fletch 50 maple shieldbow (unstrung).",
+      "title": "Fletch 50 maple longbow (unstrung).",
       "description": {
-        "plain": "Fletch 50 unstrung maple shieldbows.",
-        "wiki": "Fletch 50 [[Maple shieldbow (unstrung)|unstrung maple shieldbows]]."
+        "plain": "Fletch 50 unstrung maple longbows.",
+        "wiki": "Fletch 50 [[Maple longbow (unstrung)|unstrung maple longbows]]."
       },
       "tierId": "medium",
       "rewards": [
