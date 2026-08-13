@@ -998,6 +998,25 @@ input[type="checkbox"] {
   font-size: 0.68rem;
 }
 
+.mini-progress--tier .mini-progress__tier-label {
+  color: color-mix(in srgb, var(--tier-progress-color) 74%, var(--text));
+  font-weight: 750;
+}
+
+.mini-progress--tier .progress-track {
+  background: color-mix(in srgb, var(--tier-progress-color) 13%, #263746);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tier-progress-color) 24%, transparent);
+}
+
+.mini-progress--tier .progress-track > span {
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--tier-progress-color) 72%, #203548),
+    var(--tier-progress-color)
+  );
+  box-shadow: 0 0 0.45rem color-mix(in srgb, var(--tier-progress-color) 22%, transparent);
+}
+
 .task-results {
   min-width: 0;
 }

@@ -114,6 +114,18 @@ export function filterAndSortTaskViews(
   });
 }
 
+export function scopeTaskViewsToLocations(views: TaskView[], selectedLocationIds: string[]): TaskView[] {
+  if (selectedLocationIds.length === 0) {
+    return views;
+  }
+
+  const selectedLocations = new Set(selectedLocationIds);
+
+  return views.filter((view) =>
+    (view.task.facets.location ?? []).some((locationId) => selectedLocations.has(locationId)),
+  );
+}
+
 export function summarizeProgress(views: TaskView[]): ProgressSummary {
   const includedViews = views.filter((view) => !view.isHidden);
 

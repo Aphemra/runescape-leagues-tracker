@@ -1,6 +1,11 @@
 import { expect, test } from "vitest";
 import type { LeagueDataset, LeagueTask } from "../src/domain/leagues/types";
-import { buildTaskViews, filterAndSortTaskViews, summarizeProgress } from "../src/domain/leagues/selectTasks";
+import {
+  buildTaskViews,
+  filterAndSortTaskViews,
+  scopeTaskViewsToLocations,
+  summarizeProgress,
+} from "../src/domain/leagues/selectTasks";
 import { buildDefaultLeagueState } from "../src/domain/storage/localStorage";
 
 const manifest: LeagueDataset["manifest"] = {
@@ -132,6 +137,55 @@ test("hidden tasks are excluded from normal results and progress", () => {
     percent: 50,
     pointsEarned: 10,
     pointsAvailable: 20,
+  });
+});
+
+test("location-scoped progress excludes hidden tasks", () => {
+  const regionDataset: LeagueDataset = {
+    manifest,
+    tasks: [
+      {
+        ...task("asgarnia-easy", "Asgarnia easy task", "easy", "skills", 10),
+        facets: {
+          category: ["skills"],
+          location: ["asgarnia"],
+        },
+      },
+      {
+        ...task("asgarnia-medium", "Asgarnia medium task", "medium", "bosses", 30),
+        facets: {
+          category: ["bosses"],
+          location: ["asgarnia"],
+        },
+      },
+      {
+        ...task("desert-easy", "Desert easy task", "easy", "skills", 10),
+        facets: {
+          category: ["skills"],
+          location: ["desert"],
+        },
+      },
+    ],
+  };
+
+  const state = buildDefaultLeagueState(manifest);
+
+  state.completedTaskIds = ["asgarnia-easy", "asgarnia-medium", "desert-easy"];
+
+  state.hiddenTaskIds = ["asgarnia-medium"];
+
+  const activeViews = buildTaskViews(regionDataset, state).filter((view) => !view.isHidden);
+
+  const asgarniaViews = scopeTaskViewsToLocations(activeViews, ["asgarnia"]);
+
+  expect(asgarniaViews.map((view) => view.task.id)).toEqual(["asgarnia-easy"]);
+
+  expect(summarizeProgress(asgarniaViews)).toEqual({
+    completed: 1,
+    total: 1,
+    percent: 100,
+    pointsEarned: 10,
+    pointsAvailable: 10,
   });
 });
 

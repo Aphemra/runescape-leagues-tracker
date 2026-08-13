@@ -1,6 +1,7 @@
 import "./App.css";
 import { useEffect, useMemo, useState } from "react";
 import FiltersPanel from "./components/FiltersPanel";
+import DifficultyProgressPanel from "./components/DifficultyProgressPanel";
 import PlayerStatsModal from "./components/PlayerStatsModal";
 import ProgressPanel from "./components/ProgressPanel";
 import TaskCard from "./components/TaskCard";
@@ -301,6 +302,11 @@ export default function App() {
               onClose={() => setIsFiltersOpen(false)}
             />
             <ProgressPanel
+              manifest={manifest}
+              views={activeTaskViews}
+              selectedLocationIds={leagueState.filters.facets.location ?? []}
+            />
+            <DifficultyProgressPanel
               manifest={manifest}
               views={activeTaskViews}
               selectedLocationIds={leagueState.filters.facets.location ?? []}
