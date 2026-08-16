@@ -6,7 +6,12 @@ import PlayerStatsModal from "./components/PlayerStatsModal";
 import ProgressPanel from "./components/ProgressPanel";
 import TaskCard from "./components/TaskCard";
 import { DEFAULT_LEAGUE_ID, isKnownLeagueId, leagueCatalog, loadLeagueDataset } from "./data/leagues/catalog";
-import { buildTaskViews, filterAndSortTaskViews, summarizeProgress } from "./domain/leagues/selectTasks";
+import {
+  buildTaskViews,
+  filterAndSortTaskViews,
+  scopeTaskViewsToLocations,
+  summarizeProgress,
+} from "./domain/leagues/selectTasks";
 import { countActiveFilters } from "./domain/leagues/filterState";
 import { MilestoneProgress } from "./components/MilestoneProgress";
 import type { LeagueDataset } from "./domain/leagues/types";
@@ -101,7 +106,19 @@ export default function App() {
 
   const hiddenTaskCount = taskViews.length - activeTaskViews.length;
 
-  const progress = useMemo(() => summarizeProgress(activeTaskViews), [activeTaskViews]);
+  const selectedLocationIds = useMemo(
+    () => leagueState?.filters.facets.location ?? [],
+    [leagueState?.filters.facets.location],
+  );
+
+  const selectedRegionTaskViews = useMemo(
+    () => scopeTaskViewsToLocations(activeTaskViews, selectedLocationIds),
+    [activeTaskViews, selectedLocationIds],
+  );
+
+  const taskProgress = useMemo(() => summarizeProgress(selectedRegionTaskViews), [selectedRegionTaskViews]);
+
+  const accountProgress = useMemo(() => summarizeProgress(activeTaskViews), [activeTaskViews]);
 
   const progressionTracks = dataset?.manifest.progressionTracks ?? [];
   const visibleViews = filteredViews.slice(0, visibleLimit);
@@ -223,23 +240,28 @@ export default function App() {
           <div className="overall-progress">
             <div className="overall-progress__labels">
               <span>
-                <strong>{progress.completed.toLocaleString()}</strong> / {progress.total.toLocaleString()} tasks
+                <strong>{taskProgress.completed.toLocaleString()}</strong> / {taskProgress.total.toLocaleString()} tasks
               </span>
 
               <span>
-                <strong>{progress.pointsEarned.toLocaleString()}</strong> pts · {progress.percent}%
+                <strong>{accountProgress.pointsEarned.toLocaleString()}</strong> pts · {taskProgress.percent}%
               </span>
             </div>
 
-            <div className="progress-track progress-track--large" aria-label={`${progress.percent}% complete`}>
-              <span style={{ width: `${progress.percent}%` }} />
+            <div
+              className="progress-track progress-track--large"
+              aria-label={`${taskProgress.percent}% complete in ${
+                selectedLocationIds.length > 0 ? "the selected regions" : "all regions"
+              }`}
+            >
+              <span style={{ width: `${taskProgress.percent}%` }} />
             </div>
           </div>
 
           {progressionTracks.length > 0 && (
             <div className="overall-progress__milestones">
               {progressionTracks.map((track) => (
-                <MilestoneProgress key={track.id} track={track} points={progress.pointsEarned} />
+                <MilestoneProgress key={track.id} track={track} points={accountProgress.pointsEarned} />
               ))}
             </div>
           )}
@@ -301,15 +323,11 @@ export default function App() {
               onChange={updateFilters}
               onClose={() => setIsFiltersOpen(false)}
             />
-            <ProgressPanel
-              manifest={manifest}
-              views={activeTaskViews}
-              selectedLocationIds={leagueState.filters.facets.location ?? []}
-            />
+            <ProgressPanel manifest={manifest} views={activeTaskViews} selectedLocationIds={selectedLocationIds} />
             <DifficultyProgressPanel
               manifest={manifest}
               views={activeTaskViews}
-              selectedLocationIds={leagueState.filters.facets.location ?? []}
+              selectedLocationIds={selectedLocationIds}
             />
           </div>
         </aside>
@@ -323,7 +341,10 @@ export default function App() {
                 {leagueState.filters.hiddenOnly ? "hidden tasks" : "matching tasks"}
               </h2>
             </div>
-            <p>{progress.completed.toLocaleString()} complete overall</p>
+            <p>
+              {taskProgress.completed.toLocaleString()} complete{" "}
+              {selectedLocationIds.length > 0 ? "in selected regions" : "overall"}
+            </p>
           </div>
 
           {visibleViews.length > 0 ? (
