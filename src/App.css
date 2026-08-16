@@ -1676,32 +1676,30 @@ input[type="checkbox"] {
 }
 
 /*
- * Temporary development preview.
- * This wrapper will move off-screen during the export checkpoint.
+ * The ShareCard is mounted here only while an image is being generated.
+ * It must remain rendered, rather than display:none, for modern-screenshot
+ * to measure and capture it correctly.
  */
-.topbar:has(.share-card-preview) {
-  position: relative;
+.share-card-capture {
+  position: fixed;
+  z-index: -1000;
+  top: 0;
+  left: -10000px;
+  width: 60rem;
+  pointer-events: none;
 }
 
-.share-card-preview {
-  width: min(100% - 2rem, 70rem);
-  margin-inline: auto;
-  padding: 0.25rem 0 1rem;
-  overflow-x: auto;
+.share-card-capture .share-card {
+  margin: 0;
 }
 
-.share-card-preview__label {
-  width: 66rem;
-  margin: 0 auto 0.4rem;
-  color: var(--text-dim);
-  font-size: 0.66rem;
-  font-weight: 750;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.topbar__share:disabled {
+  opacity: 0.62;
+  cursor: wait;
 }
 
 .share-card {
-  width: 66rem;
+  width: 60rem;
   margin-inline: auto;
   overflow: hidden;
   border: 1px solid #38546b;
@@ -1717,44 +1715,50 @@ input[type="checkbox"] {
 .share-card__masthead {
   display: grid;
   grid-template-columns:
-    minmax(16rem, 1.05fr)
-    minmax(13rem, 0.8fr)
-    minmax(11rem, 0.62fr)
-    minmax(8rem, 0.4fr);
+    minmax(15.5rem, 1.08fr)
+    minmax(12rem, 0.82fr)
+    minmax(8.5rem, 0.56fr)
+    minmax(6.75rem, 0.34fr);
   gap: 0;
   align-items: stretch;
-  min-height: 5.25rem;
-  padding: 0.85rem 1.25rem;
+  min-height: 4.75rem;
+  padding: 0.65rem 1rem;
   border-bottom: 1px solid #2c4254;
   background: rgba(13, 25, 35, 0.84);
 }
 
 .share-card__identity {
   display: flex;
-  gap: 0.85rem;
+  gap: 0.7rem;
   align-items: center;
   min-width: 0;
-  padding-right: 1.15rem;
+  padding-right: 0.8rem;
 }
 
 .share-card__mark {
   display: grid;
-  width: 3rem;
-  height: 3rem;
+  width: 2.65rem;
+  height: 2.65rem;
+  box-sizing: border-box;
   flex: 0 0 auto;
   place-items: center;
+  overflow: hidden;
   border: 1px solid #dcb356;
-  border-radius: 0.78rem 0.22rem;
-  color: #211705;
+  border-radius: 0.55rem;
+  color: #15120d;
   background: linear-gradient(145deg, #f0ca70, #b77a1d);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
   font-family: Georgia, serif;
-  font-size: 1.85rem;
+  font-size: 1.65rem;
   font-weight: 900;
+  line-height: 1;
 }
 
 .share-card__identity p,
 .share-card__identity h2,
-.share-card__identity span {
+.share-card__identity > div > span {
   display: block;
   margin: 0;
 }
@@ -1790,7 +1794,7 @@ input[type="checkbox"] {
   display: grid;
   align-content: center;
   min-width: 0;
-  padding-inline: 1.15rem;
+  padding-inline: 0.7rem;
   border-right: 1px solid #263c4d;
   border-left: 1px solid #263c4d;
 }
@@ -1814,26 +1818,26 @@ input[type="checkbox"] {
 
 .share-card__route-icons {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.35rem;
   align-items: center;
-  min-height: 2rem;
-  margin-top: 0.35rem;
+  min-height: 1.7rem;
+  margin-top: 0.25rem;
 }
 
 .share-region--compact {
   display: grid;
-  width: 2rem;
-  height: 2rem;
+  width: 1.7rem;
+  height: 1.7rem;
   place-items: center;
   border: 1px solid #36546a;
-  border-radius: 0.35rem;
+  border-radius: 0.3rem;
   background: linear-gradient(145deg, #162a39, #0c1720);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .share-region--compact img {
-  width: 1.45rem;
-  height: 1.45rem;
+  width: 1.2rem;
+  height: 1.2rem;
   object-fit: contain;
 }
 
@@ -1850,7 +1854,10 @@ input[type="checkbox"] {
 
 .share-card__points {
   display: grid;
+  align-content: center;
   justify-items: end;
+  min-width: 0;
+  padding-left: 0.7rem;
 }
 
 .share-card__points span {
@@ -1862,10 +1869,10 @@ input[type="checkbox"] {
 }
 
 .share-card__points strong {
-  margin-top: 0.08rem;
+  margin-top: 0.06rem;
   color: #9cd4f2;
   font-family: Georgia, serif;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
 }
 
 .share-card__dashboard {
@@ -1878,7 +1885,7 @@ input[type="checkbox"] {
   display: grid;
   align-content: center;
   min-width: 0;
-  padding-inline: 1.15rem;
+  padding-inline: 0.85rem;
   border-left: 1px solid #263c4d;
 }
 
@@ -1956,11 +1963,15 @@ input[type="checkbox"] {
 
 .share-card__content {
   display: grid;
-  grid-template-columns:
-    minmax(0, 1.5fr)
-    minmax(23rem, 1fr);
+  grid-template-columns: 20rem minmax(0, 1fr);
   gap: 0.7rem;
+  align-items: stretch;
   padding: 0.7rem;
+}
+
+.share-card__skills {
+  width: 20rem;
+  height: 100%;
 }
 
 .share-card__panel {
@@ -2077,8 +2088,9 @@ input[type="checkbox"] {
 
 .share-card__skill-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 6rem));
   gap: 0.28rem;
+  justify-content: center;
 }
 
 .share-skill {
@@ -2088,9 +2100,10 @@ input[type="checkbox"] {
   gap: 0.18rem;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
   min-width: 0;
-  min-height: 1.95rem;
   max-width: 6rem;
+  min-height: 1.95rem;
   padding: 0.16rem 0.28rem;
   border: 1px solid #2a4051;
   border-radius: 0.22rem;
@@ -2285,8 +2298,17 @@ input[type="checkbox"] {
 }
 
 .share-card__mark {
-  border-color: color-mix(in srgb, var(--share-accent-bright) 72%, white);
+  width: 2.45rem;
+  height: 2.45rem;
+  overflow: visible;
+  border-color: color-mix(in srgb, var(--share-accent-bright) 78%, white);
+  border-radius: 0.65rem 0.2rem;
+  color: color-mix(in srgb, var(--share-accent-deep) 78%, #050608);
   background: linear-gradient(145deg, var(--share-accent-bright), var(--share-accent));
+  box-shadow: 0 0 1.4rem color-mix(in srgb, var(--share-accent) 32%, transparent);
+  font-size: 1.5rem;
+  line-height: normal;
+  text-indent: 0;
 }
 
 .share-card__identity p,
@@ -2341,6 +2363,10 @@ input[type="checkbox"] {
 
 .share-mini-progress:not(.share-mini-progress--tier) .share-mini-progress__track > span {
   background: linear-gradient(90deg, var(--share-accent), var(--share-accent-bright));
+}
+
+.share-card__website-color {
+  color: var(--share-accent);
 }
 
 .share-card__footer {
@@ -2402,18 +2428,6 @@ input[type="checkbox"] {
     opacity: 0;
     background: #030604b8;
     transition: opacity 160ms ease;
-  }
-
-  .share-card__content {
-    display: grid;
-    grid-template-columns: 19rem minmax(0, 1fr);
-    gap: 0.7rem;
-    align-items: stretch;
-    padding: 0.7rem;
-  }
-
-  .share-card__skills {
-    height: 100%;
   }
 
   .filters-shell--open {

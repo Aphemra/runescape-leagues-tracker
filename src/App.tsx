@@ -1,5 +1,7 @@
 import "./App.css";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { domToPng, waitUntilLoad } from "modern-screenshot";
 import FiltersPanel from "./components/FiltersPanel";
 import DifficultyProgressPanel from "./components/DifficultyProgressPanel";
 import PlayerStatsModal from "./components/PlayerStatsModal";
@@ -28,22 +30,24 @@ import { migrateLegacyV1State } from "./migrations/legacyV1";
 
 const INITIAL_TASK_LIMIT = 100;
 
-function toggleId(ids: string[], id: string): string[] {
-  return ids.includes(id) ? ids.filter((entry) => entry !== id) : [...ids, id];
+type ShareCaptureRequest = {
+  id: number;
+  username: string;
+  filename: string;
+};
+
+function safeFilenamePart(value: string): string {
+  return (
+    value
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "account"
+  );
 }
 
-function makeExport(state: LeagueUserState, leagueName: string): void {
-  const payload = JSON.stringify(
-    { app: "RuneScape Leagues Tracker", leagueName, exportedAt: new Date().toISOString(), state },
-    null,
-    2,
-  );
-  const url = URL.createObjectURL(new Blob([payload], { type: "application/json" }));
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `${state.leagueId}-save.json`;
-  anchor.click();
-  URL.revokeObjectURL(url);
+function toggleId(ids: string[], id: string): string[] {
+  return ids.includes(id) ? ids.filter((entry) => entry !== id) : [...ids, id];
 }
 
 export default function App() {
@@ -57,6 +61,9 @@ export default function App() {
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
   const [isStatsOpen, setIsStatsOpen] = useState(false);
   const [visibleLimit, setVisibleLimit] = useState(INITIAL_TASK_LIMIT);
+  const [shareCapture, setShareCapture] = useState<ShareCaptureRequest | null>(null);
+  const [isCapturingShare, setIsCapturingShare] = useState(false);
+  const shareCardRef = useRef<HTMLElement>(null);
 
   const catalogEntry = leagueCatalog.find((entry) => entry.id === selectedLeagueId) ?? leagueCatalog[0];
 
@@ -90,6 +97,67 @@ export default function App() {
   useEffect(() => {
     if (leagueState) saveLeagueState(leagueState);
   }, [leagueState]);
+
+  useEffect(() => {
+    if (!shareCapture || !shareCardRef.current) return;
+
+    const captureNode = shareCardRef.current;
+    const captureFilename = shareCapture.filename;
+    let cancelled = false;
+
+    async function captureShareCard() {
+      try {
+        await document.fonts.ready;
+
+        await waitUntilLoad(captureNode, {
+          timeout: 10_000,
+        });
+
+        await new Promise<void>((resolve) => {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => resolve());
+          });
+        });
+
+        if (cancelled) return;
+
+        const dataUrl = await domToPng(captureNode, {
+          scale: 2,
+        });
+
+        if (cancelled) return;
+
+        const anchor = document.createElement("a");
+        anchor.href = dataUrl;
+        anchor.download = captureFilename;
+
+        document.body.append(anchor);
+        anchor.click();
+        anchor.remove();
+      } catch (error: unknown) {
+        if (!cancelled) {
+          console.error("Could not generate the progression image.", error);
+
+          window.alert(
+            error instanceof Error
+              ? `Could not generate the progression image: ${error.message}`
+              : "Could not generate the progression image.",
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setShareCapture(null);
+          setIsCapturingShare(false);
+        }
+      }
+    }
+
+    void captureShareCard();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [shareCapture]);
 
   const taskViews = useMemo(
     () => (dataset && leagueState ? buildTaskViews(dataset, leagueState) : []),
@@ -149,6 +217,28 @@ export default function App() {
     });
   }
 
+  function requestShareImage() {
+    if (!dataset || isCapturingShare) return;
+
+    const enteredUsername = window.prompt("Enter the account name to display on the progression image:", "");
+
+    if (enteredUsername === null) return;
+
+    const username = enteredUsername.trim();
+
+    if (!username) {
+      window.alert("Enter an account name before generating the image.");
+      return;
+    }
+
+    setIsCapturingShare(true);
+    setShareCapture({
+      id: Date.now(),
+      username,
+      filename: `${dataset.manifest.id}-${safeFilenamePart(username)}-progress.png`,
+    });
+  }
+
   if (loadError) {
     return (
       <main className="status-screen">
@@ -199,6 +289,8 @@ export default function App() {
                 setVisibleLimit(INITIAL_TASK_LIMIT);
                 setIsFiltersOpen(false);
                 setIsStatsOpen(false);
+                setShareCapture(null);
+                setIsCapturingShare(false);
               }}
             >
               {leagueCatalog.map((entry) => (
@@ -213,12 +305,14 @@ export default function App() {
             <button className="secondary-button" type="button" onClick={() => setIsStatsOpen(true)}>
               Player levels
             </button>
+
             <button
-              className="secondary-button topbar__export"
+              className="secondary-button topbar__share"
               type="button"
-              onClick={() => makeExport(leagueState, manifest.name)}
+              disabled={isCapturingShare}
+              onClick={requestShareImage}
             >
-              Export save
+              {isCapturingShare ? "Creating image…" : "Share image"}
             </button>
           </div>
         </div>
@@ -293,19 +387,6 @@ export default function App() {
             Filters
             {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
           </button>
-        </div>
-
-        <div className="share-card-preview">
-          <p className="share-card-preview__label">Share card development preview</p>
-
-          <ShareProgressCard
-            username="Account name"
-            manifest={manifest}
-            stats={leagueState.stats}
-            maxedStatIds={leagueState.maxedStatIds}
-            views={activeTaskViews}
-            selectedLocationIds={selectedLocationIds}
-          />
         </div>
       </header>
 
@@ -445,6 +526,22 @@ export default function App() {
           </footer>
         </section>
       </main>
+
+      {shareCapture &&
+        createPortal(
+          <div className="share-card-capture" aria-hidden="true" data-capture-id={shareCapture.id}>
+            <ShareProgressCard
+              ref={shareCardRef}
+              username={shareCapture.username}
+              manifest={manifest}
+              stats={leagueState.stats}
+              maxedStatIds={leagueState.maxedStatIds}
+              views={activeTaskViews}
+              selectedLocationIds={selectedLocationIds}
+            />
+          </div>,
+          document.body,
+        )}
 
       {isStatsOpen && (
         <PlayerStatsModal

@@ -366,7 +366,10 @@ const ShareProgressCard = forwardRef<HTMLElement, ShareProgressCardProps>(functi
       </div>
 
       <footer className="share-card__footer">
-        <span>RuneScape Leagues Tracker</span>
+        <span>
+          RuneScape League Ledger:{" "}
+          <span className="share-card__website-color">aphemra.github.io/runescape-leagues-tracker</span>
+        </span>
 
         <span>
           Generated{" "}

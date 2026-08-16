@@ -57,7 +57,7 @@ export const osrsPlayerStats: PlayerStatDefinition[] = [
 
   stat("construction", "Construction", "Artisan"),
   stat("hunter", "Hunter", "Gathering"),
-  stat("sailing", "Sailing", "Gathering", { icon: false }),
+  stat("sailing", "Sailing", "Gathering"),
 ];
 
 const rs3Caps: Record<string, number> = {
