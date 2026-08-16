@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import FiltersPanel from "./components/FiltersPanel";
 import DifficultyProgressPanel from "./components/DifficultyProgressPanel";
 import PlayerStatsModal from "./components/PlayerStatsModal";
+import ShareProgressCard from "./components/ShareProgressCard";
 import ProgressPanel from "./components/ProgressPanel";
 import TaskCard from "./components/TaskCard";
 import { DEFAULT_LEAGUE_ID, isKnownLeagueId, leagueCatalog, loadLeagueDataset } from "./data/leagues/catalog";
@@ -292,6 +293,19 @@ export default function App() {
             Filters
             {activeFilterCount > 0 && <span>{activeFilterCount}</span>}
           </button>
+        </div>
+
+        <div className="share-card-preview">
+          <p className="share-card-preview__label">Share card development preview</p>
+
+          <ShareProgressCard
+            username="Account name"
+            manifest={manifest}
+            stats={leagueState.stats}
+            maxedStatIds={leagueState.maxedStatIds}
+            views={activeTaskViews}
+            selectedLocationIds={selectedLocationIds}
+          />
         </div>
       </header>
 
