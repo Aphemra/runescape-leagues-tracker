@@ -5,7 +5,12 @@
     "game": "rs3",
     "name": "Equilibrium League",
     "shortName": "Equilibrium",
-    "edition": "RuneScape League II",
+        "edition": "RuneScape League II",
+    "theme": {
+      "accent": "#745ed6",
+      "accentBright": "#91d4ed",
+      "accentDeep": "#211a42"
+    },
     "status": "complete",
     "contentVersion": "wiki-37152583",
     "source": {

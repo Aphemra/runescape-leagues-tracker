@@ -24,6 +24,7 @@ type ImportDefinition = {
   name: string;
   shortName: string;
   edition: string;
+  theme: NonNullable<LeagueManifest["theme"]>;
   status: LeagueManifest["status"];
   apiUrl: string;
   wikiBaseUrl: string;
@@ -87,6 +88,11 @@ const IMPORTS: ImportDefinition[] = [
     name: "Demonic Pacts League",
     shortName: "Demonic Pacts",
     edition: "League VI",
+    theme: {
+      accent: "#bd3e35",
+      accentBright: "#f08a4b",
+      accentDeep: "#351416",
+    },
     status: "complete",
     apiUrl: "https://oldschool.runescape.wiki/api.php",
     wikiBaseUrl: "https://oldschool.runescape.wiki/w/",
@@ -146,6 +152,11 @@ const IMPORTS: ImportDefinition[] = [
     name: "Equilibrium League",
     shortName: "Equilibrium",
     edition: "RuneScape League II",
+    theme: {
+      accent: "#745ed6",
+      accentBright: "#91d4ed",
+      accentDeep: "#211a42",
+    },
     status: "complete",
     apiUrl: "https://runescape.wiki/api.php",
     wikiBaseUrl: "https://runescape.wiki/w/",
@@ -441,6 +452,7 @@ async function importLeague(definition: ImportDefinition): Promise<void> {
     name: definition.name,
     shortName: definition.shortName,
     edition: definition.edition,
+    theme: definition.theme,
     status: definition.status,
     contentVersion: `wiki-${revision ?? "unknown"}`,
     source: {

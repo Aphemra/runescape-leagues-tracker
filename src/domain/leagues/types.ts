@@ -148,6 +148,12 @@ export type LeagueSourceDefinition = {
   importedAt?: string;
 };
 
+export type LeagueThemeDefinition = {
+  accent: string;
+  accentBright: string;
+  accentDeep: string;
+};
+
 export type LeagueManifest = {
   schemaVersion: 2;
   id: string;
@@ -155,6 +161,7 @@ export type LeagueManifest = {
   name: string;
   shortName: string;
   edition: string;
+  theme?: LeagueThemeDefinition;
   status: PublicationStatus;
   contentVersion: string;
   source: LeagueSourceDefinition;

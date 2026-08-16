@@ -5,7 +5,12 @@
     "game": "osrs",
     "name": "Demonic Pacts League",
     "shortName": "Demonic Pacts",
-    "edition": "League VI",
+        "edition": "OSRS League VI",
+    "theme": {
+      "accent": "#bd3e35",
+      "accentBright": "#f08a4b",
+      "accentDeep": "#351416"
+    },
     "status": "complete",
     "contentVersion": "wiki-15270808",
     "source": {

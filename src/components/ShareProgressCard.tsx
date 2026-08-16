@@ -17,6 +17,12 @@ type TierProgressStyle = CSSProperties & {
   "--share-tier-color": string;
 };
 
+type ShareCardStyle = CSSProperties & {
+  "--share-accent": string;
+  "--share-accent-bright": string;
+  "--share-accent-deep": string;
+};
+
 const AUTOMATIC_REGION_IDS = new Set(["global", "general", "misthalin", "havenhythe", "karamja"]);
 
 const REGION_CHOICE_LIMIT = 3;
@@ -107,9 +113,21 @@ const ShareProgressCard = forwardRef<HTMLElement, ShareProgressCardProps>(functi
     };
   }, [manifest.playerStats, maxedStatIds, stats]);
 
+  const theme = manifest.theme ?? {
+    accent: "#4c93c2",
+    accentBright: "#92cfee",
+    accentDeep: "#142638",
+  };
+
+  const cardStyle: ShareCardStyle = {
+    "--share-accent": theme.accent,
+    "--share-accent-bright": theme.accentBright,
+    "--share-accent-deep": theme.accentDeep,
+  };
+
   return (
-    <article className={`share-card share-card--${manifest.game}`} ref={ref}>
-      <header className="share-card__header">
+    <article className={`share-card share-card--${manifest.game}`} style={cardStyle} ref={ref}>
+      <header className="share-card__masthead">
         <div className="share-card__identity">
           <span className="share-card__mark" aria-hidden="true">
             L
@@ -124,17 +142,11 @@ const ShareProgressCard = forwardRef<HTMLElement, ShareProgressCardProps>(functi
           </div>
         </div>
 
-        <div className="share-card__points">
-          <span>League points</span>
-          <strong>{accountProgress.pointsEarned.toLocaleString()}</strong>
-        </div>
-      </header>
-
-      <section className="share-card__overview">
         <div className="share-card__task-progress">
           <div className="share-card__section-heading">
             <div>
               <span>Selected-region completion</span>
+
               <strong>
                 {taskProgress.completed.toLocaleString()} / {taskProgress.total.toLocaleString()} tasks
               </strong>
@@ -152,18 +164,46 @@ const ShareProgressCard = forwardRef<HTMLElement, ShareProgressCardProps>(functi
           </div>
         </div>
 
-        {manifest.progressionTracks && manifest.progressionTracks.length > 0 && (
-          <div className="share-card__milestones">
-            {manifest.progressionTracks.map((track) => (
-              <MilestoneProgress key={track.id} track={track} points={accountProgress.pointsEarned} />
-            ))}
-          </div>
-        )}
-      </section>
+        <div className="share-card__route">
+          <div className="share-card__route-heading">
+            <span>{chosenLocations.length < REGION_CHOICE_LIMIT ? "Region choices so far" : "Chosen regions"}</span>
 
-      <div className="share-card__body">
+            <strong>
+              {chosenLocations.length}/{REGION_CHOICE_LIMIT}
+            </strong>
+          </div>
+
+          <div className="share-card__route-icons">
+            {chosenLocations.length > 0 ? (
+              chosenLocations.map((location) => (
+                <div
+                  className="share-region share-region--compact"
+                  key={location.id}
+                  title={location.label}
+                  aria-label={location.label}
+                >
+                  {location.icon ? (
+                    <img src={assetPath(location.icon)} alt="" />
+                  ) : (
+                    <span className="share-region__fallback">{location.label.slice(0, 2)}</span>
+                  )}
+                </div>
+              ))
+            ) : (
+              <span className="share-card__route-empty">No regions selected</span>
+            )}
+          </div>
+        </div>
+
+        <div className="share-card__points">
+          <span>League points</span>
+          <strong>{accountProgress.pointsEarned.toLocaleString()}</strong>
+        </div>
+      </header>
+
+      <div className="share-card__content">
         <section className="share-card__panel share-card__skills">
-          <header className="share-card__panel-header">
+          <header className="share-card__panel-header share-card__skills-header">
             <div>
               <span>Account development</span>
               <h3>Player levels</h3>
@@ -174,6 +214,7 @@ const ShareProgressCard = forwardRef<HTMLElement, ShareProgressCardProps>(functi
 
               <strong>
                 {skillSummary.actualTotal.toLocaleString()}
+
                 {skillSummary.virtualTotal > skillSummary.actualTotal && (
                   <small> ({skillSummary.virtualTotal.toLocaleString()})</small>
                 )}
@@ -210,6 +251,11 @@ const ShareProgressCard = forwardRef<HTMLElement, ShareProgressCardProps>(functi
 
                   <span className="share-skill__levels">
                     <strong>{actualLevel}</strong>
+
+                    <span className="share-skill__separator" aria-hidden="true">
+                      |
+                    </span>
+
                     <span>{virtualLevel}</span>
                   </span>
                 </div>
@@ -217,7 +263,9 @@ const ShareProgressCard = forwardRef<HTMLElement, ShareProgressCardProps>(functi
             })}
           </div>
 
-          <div className="share-card__skill-legend" aria-label="Skill outline legend">
+          <div className="share-card__skill-legend" aria-label="Skill display legend">
+            <span className="share-card__level-order">Current | Virtual</span>
+
             <span>
               <i className="share-card__legend-swatch share-card__legend-swatch--level" />
               Level cap
@@ -235,107 +283,86 @@ const ShareProgressCard = forwardRef<HTMLElement, ShareProgressCardProps>(functi
           </div>
         </section>
 
-        <aside className="share-card__sidebar">
-          <section className="share-card__panel">
-            <header className="share-card__panel-header">
-              <div>
-                <span>League route</span>
-
-                <h3>{chosenLocations.length < REGION_CHOICE_LIMIT ? "Region choices so far" : "Chosen regions"}</h3>
-              </div>
-
-              <strong className="share-card__region-count">
-                {chosenLocations.length}/{REGION_CHOICE_LIMIT}
-              </strong>
-            </header>
-
-            <div className="share-card__regions">
-              {chosenLocations.length > 0 ? (
-                chosenLocations.map((location) => (
-                  <div className="share-region" key={location.id} title={location.label} aria-label={location.label}>
-                    {location.icon ? (
-                      <img src={assetPath(location.icon)} alt="" />
-                    ) : (
-                      <span className="share-region__fallback">{location.label.slice(0, 2)}</span>
-                    )}
-                  </div>
-                ))
-              ) : (
-                <p className="share-card__empty-copy">No unlockable regions selected yet.</p>
-              )}
+        <section className="share-card__panel share-card__breakdown">
+          <header className="share-card__panel-header">
+            <div>
+              <span>Selected-route task breakdown</span>
+              <h3>League progress</h3>
             </div>
-          </section>
+          </header>
 
-          <section className="share-card__panel">
-            <header className="share-card__panel-header">
-              <div>
-                <span>Task breakdown</span>
-                <h3>Progress by location</h3>
-              </div>
-            </header>
-
-            <div className="share-card__progress-list">
-              {locationProgress.length > 0 ? (
-                locationProgress.map(({ location, progress }) => (
-                  <div className="share-mini-progress" key={location.id}>
-                    <div>
-                      <span>{location.label}</span>
-                      <strong>
-                        {progress.completed}/{progress.total}
-                      </strong>
-                    </div>
-
-                    <div className="share-mini-progress__track">
-                      <span
-                        style={{
-                          width: `${progress.percent}%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p className="share-card__empty-copy">No specific regions selected.</p>
-              )}
+          {manifest.progressionTracks && manifest.progressionTracks.length > 0 && (
+            <div className="share-card__milestones">
+              {manifest.progressionTracks.map((track) => (
+                <MilestoneProgress key={track.id} track={track} points={accountProgress.pointsEarned} />
+              ))}
             </div>
-          </section>
+          )}
 
-          <section className="share-card__panel">
-            <header className="share-card__panel-header">
-              <div>
-                <span>Task breakdown</span>
-                <h3>Progress by difficulty</h3>
+          <div className="share-card__breakdown-grid">
+            <section className="share-card__breakdown-section">
+              <h4>By location</h4>
+
+              <div className="share-card__progress-list">
+                {locationProgress.length > 0 ? (
+                  locationProgress.map(({ location, progress }) => (
+                    <div className="share-mini-progress" key={location.id}>
+                      <div>
+                        <span>{location.label}</span>
+
+                        <strong>
+                          {progress.completed}/{progress.total}
+                        </strong>
+                      </div>
+
+                      <div className="share-mini-progress__track">
+                        <span
+                          style={{
+                            width: `${progress.percent}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="share-card__empty-copy">No specific regions selected.</p>
+                )}
               </div>
-            </header>
+            </section>
 
-            <div className="share-card__progress-list">
-              {difficultyProgress.map(({ tier, progress }) => {
-                const tierStyle: TierProgressStyle = {
-                  "--share-tier-color": tier.color,
-                };
+            <section className="share-card__breakdown-section">
+              <h4>By difficulty</h4>
 
-                return (
-                  <div className="share-mini-progress share-mini-progress--tier" style={tierStyle} key={tier.id}>
-                    <div>
-                      <span>{tier.label}</span>
-                      <strong>
-                        {progress.completed}/{progress.total}
-                      </strong>
+              <div className="share-card__progress-list">
+                {difficultyProgress.map(({ tier, progress }) => {
+                  const tierStyle: TierProgressStyle = {
+                    "--share-tier-color": tier.color,
+                  };
+
+                  return (
+                    <div className="share-mini-progress share-mini-progress--tier" style={tierStyle} key={tier.id}>
+                      <div>
+                        <span>{tier.label}</span>
+
+                        <strong>
+                          {progress.completed}/{progress.total}
+                        </strong>
+                      </div>
+
+                      <div className="share-mini-progress__track">
+                        <span
+                          style={{
+                            width: `${progress.percent}%`,
+                          }}
+                        />
+                      </div>
                     </div>
-
-                    <div className="share-mini-progress__track">
-                      <span
-                        style={{
-                          width: `${progress.percent}%`,
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        </aside>
+                  );
+                })}
+              </div>
+            </section>
+          </div>
+        </section>
       </div>
 
       <footer className="share-card__footer">
