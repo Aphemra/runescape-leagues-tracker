@@ -1413,11 +1413,11 @@
         "plain": "Upgrade the workshop in Fort Forinthry to tier 3.",
         "wiki": "Upgrade the [[Workshop (Fort Forinthry)|workshop]] in [[Fort Forinthry]] to tier 3."
       },
-      "tierId": "elite",
+      "tierId": "medium",
       "rewards": [
         {
           "currencyId": "league-points",
-          "amount": 200
+          "amount": 80
         }
       ],
       "facets": {
