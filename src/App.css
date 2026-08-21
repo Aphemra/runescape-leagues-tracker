@@ -1494,6 +1494,62 @@ input[type="checkbox"] {
   font-weight: 750;
 }
 
+.player-stats-modal__footer {
+  flex-wrap: wrap;
+}
+
+.player-stats-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 1rem;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.player-stats-summary > span + span {
+  padding-left: 1rem;
+  border-left: 1px solid var(--border);
+}
+
+.player-stats-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.7rem;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  font-weight: 700;
+}
+
+.player-stats-legend > span {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.player-stats-legend__swatch {
+  display: inline-block;
+  width: 0.48rem;
+  height: 0.48rem;
+  border: 1px solid;
+  border-radius: 0.1rem;
+  background: #101820;
+}
+
+.player-stats-legend__swatch--level {
+  border-color: #4e9dd1;
+}
+
+.player-stats-legend__swatch--virtual {
+  border-color: #55ad7a;
+}
+
+.player-stats-legend__swatch--maxed {
+  border-color: #d9a441;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2526,6 +2582,15 @@ input[type="checkbox"] {
 
   .stats-grid {
     grid-template-columns: 1fr;
+  }
+
+  .player-stats-summary {
+    flex: 1;
+  }
+
+  .player-stats-legend {
+    order: 3;
+    width: 100%;
   }
 
   .modal-backdrop {

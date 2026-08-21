@@ -11,6 +11,40 @@ type PlayerStatsModalProps = {
   onClose: () => void;
 };
 
+function calculateCombatLevel(game: LeagueManifest["game"], levels: Record<string, number>) {
+  const level = (statId: string, fallback = 1) => levels[statId] ?? fallback;
+
+  const attack = level("attack");
+  const strength = level("strength");
+  const defence = level("defence");
+  const ranged = level("ranged");
+  const magic = level("magic");
+  const prayer = level("prayer");
+
+  if (game === "osrs") {
+    const baseLevel = 0.25 * (defence + level("hitpoints", 10) + Math.floor(prayer / 2));
+
+    const offensiveLevel = Math.max(
+      0.325 * (attack + strength),
+      0.325 * Math.floor(ranged * 1.5),
+      0.325 * Math.floor(magic * 1.5),
+    );
+
+    return Math.floor(baseLevel + offensiveLevel);
+  }
+
+  const strongestCombatStyle = Math.max(attack + strength, magic * 2, ranged * 2, level("necromancy") * 2);
+
+  return Math.floor(
+    (1.3 * strongestCombatStyle +
+      defence +
+      level("constitution", 10) +
+      Math.floor(prayer / 2) +
+      Math.floor(level("summoning") / 2)) /
+      4,
+  );
+}
+
 export default function PlayerStatsModal({
   manifest,
   stats,
@@ -21,25 +55,24 @@ export default function PlayerStatsModal({
 }: PlayerStatsModalProps) {
   const maxedStats = new Set(maxedStatIds);
 
-  const actualTotal = manifest.playerStats.reduce((sum, stat) => {
-    if (maxedStats.has(stat.id)) {
-      return sum + stat.maximum;
-    }
+  const actualLevels = Object.fromEntries(
+    manifest.playerStats.map((stat) => {
+      const value = maxedStats.has(stat.id) ? stat.maximum : (stats[stat.id] ?? stat.defaultValue);
 
-    const value = stats[stat.id] ?? stat.defaultValue;
-    return sum + Math.min(stat.maximum, value);
-  }, 0);
+      return [stat.id, Math.min(stat.maximum, Math.max(stat.minimum, value))];
+    }),
+  );
+
+  const actualTotal = manifest.playerStats.reduce((sum, stat) => sum + actualLevels[stat.id], 0);
 
   const virtualTotal = manifest.playerStats.reduce((sum, stat) => {
     const virtualMaximum = stat.virtualMaximum ?? stat.maximum;
+    const value = maxedStats.has(stat.id) ? virtualMaximum : (stats[stat.id] ?? stat.defaultValue);
 
-    if (maxedStats.has(stat.id)) {
-      return sum + virtualMaximum;
-    }
-
-    const value = stats[stat.id] ?? stat.defaultValue;
-    return sum + Math.min(virtualMaximum, value);
+    return sum + Math.min(virtualMaximum, Math.max(stat.minimum, value));
   }, 0);
+
+  const combatLevel = calculateCombatLevel(manifest.game, actualLevels);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -143,11 +176,34 @@ export default function PlayerStatsModal({
           </div>
         </div>
 
-        <footer className="modal__footer">
-          <span>
-            Total level <strong>{actualTotal.toLocaleString()}</strong>
-            {virtualTotal > actualTotal && <span className="virtual-total"> ({virtualTotal.toLocaleString()})</span>}
-          </span>
+        <footer className="modal__footer player-stats-modal__footer">
+          <div className="player-stats-summary">
+            <span>
+              Total level <strong>{actualTotal.toLocaleString()}</strong>
+              {virtualTotal > actualTotal && <span className="virtual-total"> ({virtualTotal.toLocaleString()})</span>}
+            </span>
+
+            <span>
+              Combat level <strong>{combatLevel}</strong>
+            </span>
+          </div>
+
+          <div className="player-stats-legend" aria-label="Player level color legend">
+            <span>
+              <i className="player-stats-legend__swatch player-stats-legend__swatch--level" aria-hidden="true" />
+              Level cap
+            </span>
+
+            <span>
+              <i className="player-stats-legend__swatch player-stats-legend__swatch--virtual" aria-hidden="true" />
+              Virtual cap
+            </span>
+
+            <span>
+              <i className="player-stats-legend__swatch player-stats-legend__swatch--maxed" aria-hidden="true" />
+              200m XP
+            </span>
+          </div>
 
           <button className="primary-button" type="button" onClick={onClose}>
             Done

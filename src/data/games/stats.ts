@@ -63,6 +63,7 @@ export const osrsPlayerStats: PlayerStatDefinition[] = [
 const rs3Caps: Record<string, number> = {
   archaeology: 120,
   attack: 120,
+  construction: 120,
   crafting: 110,
   dungeoneering: 120,
   farming: 120,
